@@ -145,3 +145,32 @@ function partition(data, pivot, left, right) {
     data[partitionIndex] = tmp;
     return partitionIndex;
 }
+
+function combSort(data) {
+    var gap = data.length;
+    var shrink = 1.3;
+    var sorted = false;
+    while (!sorted) {
+        gap = Math.floor(gap / shrink);
+        if (gap > 1) {
+            sorted = false;
+        }
+        else {
+            gap = 1;
+            sorted = true;
+        }
+        
+        var i = 0;
+        while (i + gap < data.length) {
+            if (data[i] > data[i + gap]){
+                var tmp = data[i];
+                data[i] = data[i+gap];
+                data[i+gap] = tmp;
+                sorted = false;
+            }
+            i++;
+        }
+    }
+    
+    return data;
+}
