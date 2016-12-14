@@ -94,6 +94,38 @@ function quickSort(data, left, right) {
     return data;
 }
 
+/*
+* Cocktail Shaker Sorting algorithm
+*/
+function cocktailShakerSort(data){
+    //Main loop
+    for(var i = 0; i < data.length/2; i++){
+        var swapped = false;
+        
+        //Sorts next, unsorted largest-value
+        for(var j = i; j < data.length - i - 1; j++){
+            if(data[i] < data[j+1]){
+                var tmp = data[j];
+                data[j] = data[j+1];
+                data[j+1] = tmp;
+                swapped = true;
+            }
+        }
+        
+        //Sorts next, unsorted smallest-value
+        for(var j = data.length - i - 2; j > i; j--){
+            if(data[j] > data[j-1]){
+                var tmp = data[j];
+                data[j] = data[j-1];
+                data[j-1] = tmp;
+                swapped = true;
+            }
+        }
+        
+        if(!swapped) break; //If finished sorting
+    }
+}
+
 function partition(data, pivot, left, right) {
     var pivotValue = data[pivot], partitionIndex = left;
     
