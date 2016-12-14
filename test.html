@@ -35,7 +35,7 @@
             var debstring = debstring + "value: " + data[item] + " percent: " + (data[item]/max) + " height: " +((data[item]/max) * height) + "<br>";
 //            debstring = debstring + "item " + item + " of value " + data[item] + " is at position " + x + " and is " + barHeight + " tall. <br>";
             debug.innerHTML=debstring;
-            var rect = two.makeRectangle(x, ydef, barWidth, barHeight);
+            var rect = two.makeRectangle(x, height, barWidth, barHeight);
             rect.fill = primary;
             arrayOfRects.push(rect);
             two.update();
