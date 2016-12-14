@@ -104,7 +104,7 @@ function cocktailShakerSort(data){
         
         //Sorts next, unsorted largest-value
         for(var j = i; j < data.length - i - 1; j++){
-            if(data[i] < data[j+1]){
+            if(data[j] > data[j+1]){
                 var tmp = data[j];
                 data[j] = data[j+1];
                 data[j+1] = tmp;
@@ -113,8 +113,8 @@ function cocktailShakerSort(data){
         }
         
         //Sorts next, unsorted smallest-value
-        for(var j = data.length - i - 2; j > i; j--){
-            if(data[j] > data[j-1]){
+        for(var j = data.length - 2 - i; j > i; j--){
+            if(data[j] < data[j-1]){
                 var tmp = data[j];
                 data[j] = data[j-1];
                 data[j-1] = tmp;
@@ -124,7 +124,10 @@ function cocktailShakerSort(data){
         
         if(!swapped) break; //If finished sorting
     }
+    
+    return data;
 }
+
 
 function partition(data, pivot, left, right) {
     var pivotValue = data[pivot], partitionIndex = left;
