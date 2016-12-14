@@ -1,3 +1,6 @@
+/*
+* BubbleSort sorting algorithm
+*/
 function bubbleSort(data) {
     var n = data.length;
     while (n != 0){
@@ -16,6 +19,9 @@ function bubbleSort(data) {
     return data;
 }
 
+/*
+* SelectionSort sorting algorithm
+*/
 function selectionSort(data) {
     var n = data.length;
     for (var i = 0; i < n - 1; i++) {
@@ -34,6 +40,9 @@ function selectionSort(data) {
     return data;
 }
 
+/*
+* MergeSort sorting algorithm
+*/
 function mergeSort(data) {
     if (data.length < 2) {
         return data;
@@ -45,6 +54,9 @@ function mergeSort(data) {
     return merge(mergeSort(left), mergeSort(right));
 }
 
+/*
+* Helper function for MergeSort
+*/
 function merge(left, right) {
     var result = [];
     
@@ -68,6 +80,9 @@ function merge(left, right) {
     return result;
 }
 
+/*
+* InsertionSort sorting Algorithm
+*/
 function insertionSort(data) {
     for (var i = 1; i < data.length; i++) {
         var x = data[i];
@@ -81,6 +96,9 @@ function insertionSort(data) {
     return data;
 }
 
+/*
+* QuickSort sorting algorithm
+*/
 function quickSort(data, left, right) {
     var len = data.length, pivot, partitionIndex;
     
@@ -95,7 +113,27 @@ function quickSort(data, left, right) {
 }
 
 /*
-* Cocktail Shaker Sorting algorithm
+* Helper function for quicksort
+*/ 
+function partition(data, pivot, left, right) {
+    var pivotValue = data[pivot], partitionIndex = left;
+    
+    for (var i = left; i < right; i++) {
+        if (data[i] < pivotValue) {
+            var tmp = data[i];
+            data[i] = data[partitionIndex];
+            data[partitionIndex] = tmp;
+            partitionIndex++;
+        }
+    }
+    var tmp = data[right];
+    data[right] = data[partitionIndex];
+    data[partitionIndex] = tmp;
+    return partitionIndex;
+}
+
+/*
+* Cocktail Shaker sorting algorithm
 */
 function cocktailShakerSort(data){
     //Main loop
@@ -128,24 +166,9 @@ function cocktailShakerSort(data){
     return data;
 }
 
-
-function partition(data, pivot, left, right) {
-    var pivotValue = data[pivot], partitionIndex = left;
-    
-    for (var i = left; i < right; i++) {
-        if (data[i] < pivotValue) {
-            var tmp = data[i];
-            data[i] = data[partitionIndex];
-            data[partitionIndex] = tmp;
-            partitionIndex++;
-        }
-    }
-    var tmp = data[right];
-    data[right] = data[partitionIndex];
-    data[partitionIndex] = tmp;
-    return partitionIndex;
-}
-
+/*
+* CombSort sorting algorithm
+*/
 function combSort(data) {
     var gap = data.length;
     var shrink = 1.3;
