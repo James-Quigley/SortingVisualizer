@@ -20,8 +20,9 @@
 
 <body>
     <div id="displayArea" style="background:#404040;"></div>
-    <input type="number" id="delay" min="1" max="1000">
-    <input type="submit" id="bubble">
+    <input type="number" id="delay" min="1" max="1000" value=250>
+    <button id="bubble">Bubble</button>
+    <button id="selection">Selection</button>
     <p id="debug"></p>
     <script>        
         function randArray(length) {
@@ -93,6 +94,11 @@
         var obj = document.getElementById("bubble");
         obj.addEventListener("click", function() {
             bubbleSort(arr, document.getElementById("delay").value);
+        });
+        
+        obj = document.getElementById("selection");
+        obj.addEventListener("click", function() {
+            selectionSort(arr, document.getElementById("delay").value);
         });
     </script>
 </body>

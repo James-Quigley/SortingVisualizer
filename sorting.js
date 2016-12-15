@@ -26,7 +26,10 @@ function bubbleSort(array, delay) {
 /*
 * SelectionSort sorting algorithm
 */
-function selectionSort(data) {
+function selectionSort(array, delay) {
+    var data = array.slice();
+    var n = data.length;
+    var swaps = 0;
     var n = data.length;
     for (var i = 0; i < n - 1; i++) {
         var min = i;
@@ -39,6 +42,8 @@ function selectionSort(data) {
             var tmp = data[i];
             data[i] = data[min];
             data[min] = tmp;
+            setTimeout(swap,delay*swaps, i, min);
+            swaps++;
         }
     }
     return data;
