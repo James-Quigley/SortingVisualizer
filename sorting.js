@@ -28,7 +28,6 @@ function bubbleSort(array, delay) {
 */
 function selectionSort(array, delay) {
     var data = array.slice();
-    var n = data.length;
     var swaps = 0;
     var n = data.length;
     for (var i = 0; i < n - 1; i++) {
@@ -144,7 +143,9 @@ function partition(data, pivot, left, right) {
 /*
 * Cocktail Shaker sorting algorithm
 */
-function cocktailShakerSort(data){
+function cocktailShakerSort(array, delay){
+    var data = array.slice();
+    var swaps = 0;
     //Main loop
     for(var i = 0; i < data.length/2; i++){
         var swapped = false;
@@ -156,6 +157,9 @@ function cocktailShakerSort(data){
                 data[j] = data[j+1];
                 data[j+1] = tmp;
                 swapped = true;
+                
+                setTimeout(swap, delay*swaps, j, j+1);
+                swaps++;
             }
         }
         
@@ -166,6 +170,9 @@ function cocktailShakerSort(data){
                 data[j] = data[j-1];
                 data[j-1] = tmp;
                 swapped = true;
+                
+                setTimeout(swap, delay*swaps, j, j-1);
+                swaps++;
             }
         }
         

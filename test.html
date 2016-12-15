@@ -23,6 +23,7 @@
     <input type="number" id="delay" min="1" max="1000" value=250>
     <button id="bubble">Bubble</button>
     <button id="selection">Selection</button>
+    <button id="cocktail">Cocktail Shaker</button>
     <p id="debug"></p>
     <script>        
         function randArray(length) {
@@ -99,6 +100,11 @@
         obj = document.getElementById("selection");
         obj.addEventListener("click", function() {
             selectionSort(arr, document.getElementById("delay").value);
+        });
+        
+        obj = document.getElementById("cocktail");
+        obj.addEventListener("click", function() {
+            cocktailShakerSort(arr, document.getElementById("delay").value);
         });
     </script>
 </body>
