@@ -25,8 +25,11 @@
     <button id="selection">Selection</button>
     <button id="cocktail">Cocktail Shaker</button>
     <button id="comb">Comb Sort</button>
+    <button id="reset">Reset</button>
     <p id="debug"></p>
-    <script>        
+    <script>
+        var LEN = 100;
+        
         function randArray(length) {
             //grab the arr
             for (var arr = [], i = 0; i < length; ++i) arr[i] = i;
@@ -43,7 +46,7 @@
             return arr;
         }
 
-        var arr = randArray(100);
+        var arr = randArray(LEN);
         
         
         
@@ -93,6 +96,11 @@
             draw();
         }
         
+        function setData(arr) {
+            data = arr;
+            draw();
+        }
+        
         var obj = document.getElementById("bubble");
         obj.addEventListener("click", function() {
             bubbleSort(arr, document.getElementById("delay").value);
@@ -111,6 +119,12 @@
         obj = document.getElementById("comb");
         obj.addEventListener("click", function() {
             combSort(arr, document.getElementById("delay").value);
+        });
+        
+        obj = document.getElementById("reset");
+        obj.addEventListener("click", function() {
+            arr = randArray(LEN);
+            draw();
         });
     </script>
 </body>
