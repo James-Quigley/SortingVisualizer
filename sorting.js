@@ -185,7 +185,9 @@ function cocktailShakerSort(array, delay){
 /*
 * CombSort sorting algorithm
 */
-function combSort(data) {
+function combSort(array, delay) {
+    var data = array.slice();
+    var swaps = 0;
     var gap = data.length;
     var shrink = 1.3;
     var sorted = false;
@@ -206,6 +208,9 @@ function combSort(data) {
                 data[i] = data[i+gap];
                 data[i+gap] = tmp;
                 sorted = false;
+                
+                setTimeout(swap, delay*swaps, i, i+gap);
+                swaps++;
             }
             i++;
         }
