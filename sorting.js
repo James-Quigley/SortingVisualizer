@@ -1,8 +1,10 @@
 /*
 * BubbleSort sorting algorithm
 */
-function bubbleSort(data) {
+function bubbleSort(array, delay) {
+    var data = array.slice();
     var n = data.length;
+    var swaps = 0;
     while (n != 0){
         var newn = 0;
         for (var i = 1; i <= n-1; i++){
@@ -12,6 +14,8 @@ function bubbleSort(data) {
                 data[i-1] = data[i];
                 data[i] = tmp;
                 newn = i;
+                setTimeout(swap,delay*swaps,i-1, i);
+                swaps++;
             }
         }
         n = newn;
