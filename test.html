@@ -29,7 +29,7 @@
     <p id="debug"></p>
     <script>
         var LEN = 100;
-        
+
         function randArray(length) {
             //grab the arr
             for (var arr = [], i = 0; i < length; ++i) arr[i] = i;
@@ -47,9 +47,9 @@
         }
 
         var arr = randArray(LEN);
-        
-        
-        
+
+
+
         //initialize two.js
         var xdef = 0;
         var height = 500;
@@ -88,41 +88,50 @@
                 two.update();
             }
         }
-        
+
         function swap(i, j) {
             var tmp = arr[i];
             arr[i] = arr[j];
             arr[j] = tmp;
             draw();
         }
-        
+
         function setData(arr) {
             data = arr;
             draw();
         }
-        
+
+        function stopTracked() {
+            for (var i = 0; i < timeouts.length; i++) {
+                clearTimeout(timeouts[i]);
+            }
+
+            timeouts = [];
+        }
+
         var obj = document.getElementById("bubble");
-        obj.addEventListener("click", function() {
+        obj.addEventListener("click", function () {
             bubbleSort(arr, document.getElementById("delay").value);
         });
-        
+
         obj = document.getElementById("selection");
-        obj.addEventListener("click", function() {
+        obj.addEventListener("click", function () {
             selectionSort(arr, document.getElementById("delay").value);
         });
-        
+
         obj = document.getElementById("cocktail");
-        obj.addEventListener("click", function() {
+        obj.addEventListener("click", function () {
             cocktailShakerSort(arr, document.getElementById("delay").value);
         });
-        
+
         obj = document.getElementById("comb");
-        obj.addEventListener("click", function() {
+        obj.addEventListener("click", function () {
             combSort(arr, document.getElementById("delay").value);
         });
-        
+
         obj = document.getElementById("reset");
-        obj.addEventListener("click", function() {
+        obj.addEventListener("click", function () {
+            stopTracked();
             arr = randArray(LEN);
             draw();
         });

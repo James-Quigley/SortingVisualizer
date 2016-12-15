@@ -1,3 +1,4 @@
+var timeouts = [];
 /*
 * BubbleSort sorting algorithm
 */
@@ -14,7 +15,7 @@ function bubbleSort(array, delay) {
                 data[i-1] = data[i];
                 data[i] = tmp;
                 newn = i;
-                setTimeout(swap,delay*swaps,i-1, i);
+                timeouts.push(setTimeout(swap,delay*swaps,i-1, i));
                 swaps++;
             }
         }
@@ -41,7 +42,7 @@ function selectionSort(array, delay) {
             var tmp = data[i];
             data[i] = data[min];
             data[min] = tmp;
-            setTimeout(swap,delay*swaps, i, min);
+            timeouts.push(setTimeout(swap,delay*swaps, i, min));
             swaps++;
         }
     }
@@ -158,7 +159,7 @@ function cocktailShakerSort(array, delay){
                 data[j+1] = tmp;
                 swapped = true;
                 
-                setTimeout(swap, delay*swaps, j, j+1);
+                timeouts.push(setTimeout(swap, delay*swaps, j, j+1));
                 swaps++;
             }
         }
@@ -171,7 +172,7 @@ function cocktailShakerSort(array, delay){
                 data[j-1] = tmp;
                 swapped = true;
                 
-                setTimeout(swap, delay*swaps, j, j-1);
+                timeouts.push(setTimeout(swap, delay*swaps, j, j-1));
                 swaps++;
             }
         }
@@ -209,7 +210,7 @@ function combSort(array, delay) {
                 data[i+gap] = tmp;
                 sorted = false;
                 
-                setTimeout(swap, delay*swaps, i, i+gap);
+                timeouts.push(setTimeout(swap, delay*swaps, i, i+gap));
                 swaps++;
             }
             i++;
