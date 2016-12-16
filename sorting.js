@@ -28,25 +28,42 @@ function bubbleSort(array, delay) {
 * SelectionSort sorting algorithm
 */
 function selectionSort(array, delay) {
+    var states = [];
+    var color = {};
     var data = array.slice();
     var swaps = 0;
     var n = data.length;
+    
+    states.push(new State(data, color));
     for (var i = 0; i < n - 1; i++) {
         var min = i;
+        color[i] = "#FFFF00";
+        states.push(new State(data, color));
         for (var j = i + 1; j < n; j++) {
+            color[j] = "#0000FF";
+            states.push(new State(data, color));
             if (data[j] < data[min]){
+                color[min] = null;
                 min = j;
+                color[j] = "#FFFF00";
+                states.push(new State(data, color));
             }
         }
+        color[n-1] = null;
+        states.push(new State(data, color));
         if (min != i) {
             var tmp = data[i];
             data[i] = data[min];
             data[min] = tmp;
             timeouts.push(setTimeout(swap,delay*swaps, i, min));
             swaps++;
+            color[min] = null;
         }
+        color[i] = "#00FF00";
+        states.push(new State(data, color));
     }
-    return data;
+    states.push(new State(data, color));
+    return states;
 }
 
 /*
