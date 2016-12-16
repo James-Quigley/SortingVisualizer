@@ -34,23 +34,23 @@ function selectionSort(array, delay) {
     var swaps = 0;
     var n = data.length;
     
-    states.push(new State(data, color));
+    states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
     for (var i = 0; i < n - 1; i++) {
         var min = i;
         color[i] = "#FFFF00";
-        states.push(new State(data, color));
+        states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
         for (var j = i + 1; j < n; j++) {
             color[j] = "#0000FF";
-            states.push(new State(data, color));
+            states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
             if (data[j] < data[min]){
                 color[min] = null;
                 min = j;
                 color[j] = "#FFFF00";
-                states.push(new State(data, color));
+                states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
             }
         }
         color[n-1] = null;
-        states.push(new State(data, color));
+        states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
         if (min != i) {
             var tmp = data[i];
             data[i] = data[min];
@@ -60,9 +60,9 @@ function selectionSort(array, delay) {
             color[min] = null;
         }
         color[i] = "#00FF00";
-        states.push(new State(data, color));
+        states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
     }
-    states.push(new State(data, color));
+    states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
     return states;
 }
 
