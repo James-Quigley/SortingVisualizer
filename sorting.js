@@ -1,8 +1,11 @@
+var timeouts = [];
 /*
 * BubbleSort sorting algorithm
 */
-function bubbleSort(data) {
+function bubbleSort(array, delay) {
+    var data = array.slice();
     var n = data.length;
+    var swaps = 0;
     while (n != 0){
         var newn = 0;
         for (var i = 1; i <= n-1; i++){
@@ -12,6 +15,8 @@ function bubbleSort(data) {
                 data[i-1] = data[i];
                 data[i] = tmp;
                 newn = i;
+                timeouts.push(setTimeout(swap,delay*swaps,i-1, i));
+                swaps++;
             }
         }
         n = newn;
@@ -22,7 +27,9 @@ function bubbleSort(data) {
 /*
 * SelectionSort sorting algorithm
 */
-function selectionSort(data) {
+function selectionSort(array, delay) {
+    var data = array.slice();
+    var swaps = 0;
     var n = data.length;
     for (var i = 0; i < n - 1; i++) {
         var min = i;
@@ -35,6 +42,8 @@ function selectionSort(data) {
             var tmp = data[i];
             data[i] = data[min];
             data[min] = tmp;
+            timeouts.push(setTimeout(swap,delay*swaps, i, min));
+            swaps++;
         }
     }
     return data;
@@ -135,7 +144,9 @@ function partition(data, pivot, left, right) {
 /*
 * Cocktail Shaker sorting algorithm
 */
-function cocktailShakerSort(data){
+function cocktailShakerSort(array, delay){
+    var data = array.slice();
+    var swaps = 0;
     //Main loop
     for(var i = 0; i < data.length/2; i++){
         var swapped = false;
@@ -147,6 +158,9 @@ function cocktailShakerSort(data){
                 data[j] = data[j+1];
                 data[j+1] = tmp;
                 swapped = true;
+                
+                timeouts.push(setTimeout(swap, delay*swaps, j, j+1));
+                swaps++;
             }
         }
         
@@ -157,6 +171,9 @@ function cocktailShakerSort(data){
                 data[j] = data[j-1];
                 data[j-1] = tmp;
                 swapped = true;
+                
+                timeouts.push(setTimeout(swap, delay*swaps, j, j-1));
+                swaps++;
             }
         }
         
@@ -169,7 +186,9 @@ function cocktailShakerSort(data){
 /*
 * CombSort sorting algorithm
 */
-function combSort(data) {
+function combSort(array, delay) {
+    var data = array.slice();
+    var swaps = 0;
     var gap = data.length;
     var shrink = 1.3;
     var sorted = false;
@@ -190,6 +209,9 @@ function combSort(data) {
                 data[i] = data[i+gap];
                 data[i+gap] = tmp;
                 sorted = false;
+                
+                timeouts.push(setTimeout(swap, delay*swaps, i, i+gap));
+                swaps++;
             }
             i++;
         }
