@@ -55,7 +55,7 @@
         //initialize two.js
         var xdef = 0;
         var height = 500;
-        var maxWidth = window.innerWidth;
+        var maxWidth = window.innerWidth; //definitely look into moving into a setup() function that gets called when the window resizes
         var paddef = 1;
         var barWidth = ((maxWidth - (paddef * arr.length)) / arr.length)
         var primary = "#ffffff";
@@ -71,6 +71,7 @@
         var debstring = "";
 
         function draw() {
+            //some of this is initial setup that we don't necissarily need to do every time. Look into breaking into helper functions
             console.log("Redrawing");
             two.clear();
             //iterate through and draw it
@@ -94,6 +95,7 @@
             two.update();
         }
 
+        //Aren't we planning on sending the entire array state?
         function swap(i, j) {
             var tmp = arr[i];
             arr[i] = arr[j];
@@ -114,6 +116,7 @@
             timeouts = [];
         }
 
+        //This method of event binding is inefficient, why not put this functionality directly in the DOM?
         var obj = document.getElementById("bubble");
         obj.addEventListener("click", function () {
             bubbleSort(arr, document.getElementById("delay").value);
