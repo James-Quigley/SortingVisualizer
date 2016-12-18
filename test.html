@@ -18,10 +18,12 @@
 
 <body>
     <div id="displayArea" style="background:#404040;"></div>
+        <a href="#" id="redraw" onclick="redraw()">redraw</a>
     <p id="debug"></p>
+
     <script>
         
-        //grab the data
+        //grab some data
         for (var data = [], i = 0; i < 200; ++i) data[i] = i;
 
         // http://stackoverflow.com/questions/962802#962890
@@ -72,6 +74,9 @@
             rect.fill = primary;
             rect.noStroke();
             arrayOfRects.push(rect);
+            two.update();
+        }
+        function redraw(){
             two.update();
         }
     </script>
