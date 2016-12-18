@@ -5,48 +5,59 @@
     <meta charset="UTF-8">
     <title>TwoJS Test</title>
     <script src="two.min.js"></script>
+    <script src="sorting.js"></script>
     <style>
-        *{
+        * {
             padding: 0px;
             margin: 0px;
         }
-        div{
-            margin:0px;
+        
+        div {
+            margin: 0px;
         }
     </style>
 </head>
 
 <body>
     <div id="displayArea" style="background:#404040;"></div>
-        <a href="#" id="redraw" onclick="redraw()">redraw</a>
+    <input type="number" id="delay" min="1" max="1000" value=50>
+    <button id="bubble">Bubble</button>
+    <button id="selection">Selection</button>
+    <button id="cocktail">Cocktail Shaker</button>
+    <button id="comb">Comb Sort</button>
+    <button id="reset">Reset</button>
     <p id="debug"></p>
 
     <script>
-        
-        //grab some data
-        for (var data = [], i = 0; i < 200; ++i) data[i] = i;
 
-        // http://stackoverflow.com/questions/962802#962890
-        function shuffle(array) {
-            var tmp, current, top = array.length;
+        var LEN = 100;
+
+        function randArray(length) {
+            //grab the arr
+            for (var arr = [], i = 0; i < length; ++i) arr[i] = i;
+
+            // http://stackoverflow.com/questions/962802#962890
+            var tmp, current, top = arr.length;
             if (top)
                 while (--top) {
                     current = Math.floor(Math.random() * (top + 1));
-                    tmp = array[current];
-                    array[current] = array[top];
-                    array[top] = tmp;
+                    tmp = arr[current];
+                    arr[current] = arr[top];
+                    arr[top] = tmp;
                 }
-            return array;
+            return arr;
         }
 
-        data = shuffle(data);
-        
+        var arr = randArray(LEN);
+
+
+
         //initialize two.js
         var xdef = 0;
         var height = 500;
         var maxWidth = window.innerWidth;
         var paddef = 1;
-        var barWidth = ((maxWidth-(paddef * data.length)) / data.length)
+        var barWidth = ((maxWidth - (paddef * arr.length)) / arr.length)
         var primary = "#ffffff";
         var elem = document.getElementById("displayArea");
         var params = {
@@ -54,31 +65,81 @@
             height: height
         };
         var two = new Two(params).appendTo(elem);
-        var debug = document.getElementById("debug");
-        
 
-        
+        draw();
 
-        //iterate through and draw it
-        var arrayOfRects = [];
-        var max = Math.max(...data);
-        console.log(max);
         var debstring = "";
-        for (item in data) {
-            var x = xdef + (barWidth * item) + (paddef * item);
-            //percent of the maxmimum value, scaled to total height of graph
-            var barHeight = (data[item] / max) * height;
-            var debstring = debstring + "value: " + data[item] + " percent: " + (data[item] / max) + " height: " + ((data[item] / max) * height) + "<br>";
-            debug.innerHTML = debstring;
-            var rect = two.makeRectangle(x, (height / 2) + (height / 2 - barHeight / 2) + 1, barWidth, barHeight);
-            rect.fill = primary;
-            rect.noStroke();
-            arrayOfRects.push(rect);
-            two.update();
+
+        function draw() {
+            console.log("Redrawing");
+            two.clear();
+            //iterate through and draw it
+            var arrayOfRects = [];
+            var max = Math.max(...arr);
+            var debug = document.getElementById("debug");
+            for (item in arr) {
+                var x = xdef + (barWidth * item) + (paddef * item);
+                //percent of the maxmimum value, scaled to total height of graph
+                var barHeight = (arr[item] / max) * height;
+                var debstring = debstring + "value: " + arr[item] + " percent: " + (arr[item] / max) + " height: " + ((arr[item] / max) * height) + "<br>";
+                debug.innerHTML = debstring;
+                var rect = two.makeRectangle(x, (height / 2) + (height / 2 - barHeight / 2) + 1, barWidth, barHeight);
+                rect.fill = primary;
+                rect.noStroke();
+                arrayOfRects.push(rect);
+                two.update();
+            }
         }
         function redraw(){
             two.update();
         }
+
+        function swap(i, j) {
+            var tmp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = tmp;
+            draw();
+        }
+
+        function setData(arr) {
+            data = arr;
+            draw();
+        }
+
+        function stopTracked() {
+            for (var i = 0; i < timeouts.length; i++) {
+                clearTimeout(timeouts[i]);
+            }
+
+            timeouts = [];
+        }
+
+        var obj = document.getElementById("bubble");
+        obj.addEventListener("click", function () {
+            bubbleSort(arr, document.getElementById("delay").value);
+        });
+
+        obj = document.getElementById("selection");
+        obj.addEventListener("click", function () {
+            selectionSort(arr, document.getElementById("delay").value);
+        });
+
+        obj = document.getElementById("cocktail");
+        obj.addEventListener("click", function () {
+            cocktailShakerSort(arr, document.getElementById("delay").value);
+        });
+
+        obj = document.getElementById("comb");
+        obj.addEventListener("click", function () {
+            combSort(arr, document.getElementById("delay").value);
+        });
+
+        obj = document.getElementById("reset");
+        obj.addEventListener("click", function () {
+            stopTracked();
+            arr = randArray(LEN);
+            draw();
+        });
     </script>
 </body>
 

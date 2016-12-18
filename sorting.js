@@ -1,5 +1,11 @@
-function bubbleSort(data) {
+var timeouts = [];
+/*
+* BubbleSort sorting algorithm
+*/
+function bubbleSort(array, delay) {
+    var data = array.slice();
     var n = data.length;
+    var swaps = 0;
     while (n != 0){
         var newn = 0;
         for (var i = 1; i <= n-1; i++){
@@ -9,6 +15,8 @@ function bubbleSort(data) {
                 data[i-1] = data[i];
                 data[i] = tmp;
                 newn = i;
+                timeouts.push(setTimeout(swap,delay*swaps,i-1, i));
+                swaps++;
             }
         }
         n = newn;
@@ -16,7 +24,12 @@ function bubbleSort(data) {
     return data;
 }
 
-function selectionSort(data) {
+/*
+* SelectionSort sorting algorithm
+*/
+function selectionSort(array, delay) {
+    var data = array.slice();
+    var swaps = 0;
     var n = data.length;
     for (var i = 0; i < n - 1; i++) {
         var min = i;
@@ -29,11 +42,16 @@ function selectionSort(data) {
             var tmp = data[i];
             data[i] = data[min];
             data[min] = tmp;
+            timeouts.push(setTimeout(swap,delay*swaps, i, min));
+            swaps++;
         }
     }
     return data;
 }
 
+/*
+* MergeSort sorting algorithm
+*/
 function mergeSort(data) {
     if (data.length < 2) {
         return data;
@@ -45,6 +63,9 @@ function mergeSort(data) {
     return merge(mergeSort(left), mergeSort(right));
 }
 
+/*
+* Helper function for MergeSort
+*/
 function merge(left, right) {
     var result = [];
     
@@ -68,6 +89,9 @@ function merge(left, right) {
     return result;
 }
 
+/*
+* InsertionSort sorting Algorithm
+*/
 function insertionSort(data) {
     for (var i = 1; i < data.length; i++) {
         var x = data[i];
@@ -81,6 +105,9 @@ function insertionSort(data) {
     return data;
 }
 
+/*
+* QuickSort sorting algorithm
+*/
 function quickSort(data, left, right) {
     var len = data.length, pivot, partitionIndex;
     
@@ -94,6 +121,9 @@ function quickSort(data, left, right) {
     return data;
 }
 
+/*
+* Helper function for quicksort
+*/ 
 function partition(data, pivot, left, right) {
     var pivotValue = data[pivot], partitionIndex = left;
     
@@ -109,4 +139,83 @@ function partition(data, pivot, left, right) {
     data[right] = data[partitionIndex];
     data[partitionIndex] = tmp;
     return partitionIndex;
+}
+
+/*
+* Cocktail Shaker sorting algorithm
+*/
+function cocktailShakerSort(array, delay){
+    var data = array.slice();
+    var swaps = 0;
+    //Main loop
+    for(var i = 0; i < data.length/2; i++){
+        var swapped = false;
+        
+        //Sorts next, unsorted largest-value
+        for(var j = i; j < data.length - i - 1; j++){
+            if(data[j] > data[j+1]){
+                var tmp = data[j];
+                data[j] = data[j+1];
+                data[j+1] = tmp;
+                swapped = true;
+                
+                timeouts.push(setTimeout(swap, delay*swaps, j, j+1));
+                swaps++;
+            }
+        }
+        
+        //Sorts next, unsorted smallest-value
+        for(var j = data.length - 2 - i; j > i; j--){
+            if(data[j] < data[j-1]){
+                var tmp = data[j];
+                data[j] = data[j-1];
+                data[j-1] = tmp;
+                swapped = true;
+                
+                timeouts.push(setTimeout(swap, delay*swaps, j, j-1));
+                swaps++;
+            }
+        }
+        
+        if(!swapped) break; //If finished sorting
+    }
+    
+    return data;
+}
+
+/*
+* CombSort sorting algorithm
+*/
+function combSort(array, delay) {
+    var data = array.slice();
+    var swaps = 0;
+    var gap = data.length;
+    var shrink = 1.3;
+    var sorted = false;
+    while (!sorted) {
+        gap = Math.floor(gap / shrink);
+        if (gap > 1) {
+            sorted = false;
+        }
+        else {
+            gap = 1;
+            sorted = true;
+        }
+        
+        var i = 0;
+        while (i + gap < data.length) {
+            if (data[i] > data[i + gap]){
+                var tmp = data[i];
+                data[i] = data[i+gap];
+                data[i+gap] = tmp;
+                sorted = false;
+                
+                timeouts.push(setTimeout(swap, delay*swaps, i, i+gap));
+                swaps++;
+            }
+            i++;
+        }
+    }
+    
+    return data;
 }
