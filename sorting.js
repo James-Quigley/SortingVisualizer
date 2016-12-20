@@ -26,6 +26,9 @@ function bubbleSort(array, delay) {
 
 /*
 * SelectionSort sorting algorithm
+* #FFFF00 = min
+* #0000FF = current
+* #00FF00 = sorted
 */
 function selectionSort(array, delay) {
     var states = [];
