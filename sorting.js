@@ -1,14 +1,33 @@
 var timeouts = [];
+
+/*
+* Adds a new state to the 'states' array parameter
+*/
+function pushToStates(states, data, color){
+    states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
+}
+
 /*
 * BubbleSort sorting algorithm
 */
 function bubbleSort(array, delay) {
+    var states = [];
+    var color = {};
     var data = array.slice();
-    var n = data.length;
     var swaps = 0;
+    var n = data.length;
+    
+    //Pushes original state of data with no new colors
+    pushToStates(states, data, color);
+    
     while (n != 0){
         var newn = 0;
         for (var i = 1; i <= n-1; i++){
+            
+            color[i] = "#0000FF"; //Current item
+            color[i-1] = "#FFFF00" //Item 'current' is comparing to
+            pushToStates(states, data, color);
+            
             if (data[i-1] > data[i]) {
                 //swap data[i-1] and data[i]
                 var tmp = data[i-1];
@@ -18,7 +37,14 @@ function bubbleSort(array, delay) {
                 timeouts.push(setTimeout(swap,delay*swaps,i-1, i));
                 swaps++;
             }
+            
+            //Resets colors from current iteration
+            color[i] = null;
+            color[i-1] = null;
+            color[newn] = "#00FF00"; //Item is sorted
+            pushToStates(states, data, color);
         }
+        
         n = newn;
     }
     return data;
@@ -26,27 +52,47 @@ function bubbleSort(array, delay) {
 
 /*
 * SelectionSort sorting algorithm
+* #FFFF00 = min
+* #0000FF = current
+* #00FF00 = sorted
 */
 function selectionSort(array, delay) {
+    var states = [];
+    var color = {};
     var data = array.slice();
     var swaps = 0;
     var n = data.length;
+    
+    states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
     for (var i = 0; i < n - 1; i++) {
         var min = i;
+        color[i] = "#FFFF00";
+        states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
         for (var j = i + 1; j < n; j++) {
+            color[j] = "#0000FF";
+            states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
             if (data[j] < data[min]){
+                color[min] = null;
                 min = j;
+                color[j] = "#FFFF00";
+                states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
             }
         }
+        color[n-1] = null;
+        states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
         if (min != i) {
             var tmp = data[i];
             data[i] = data[min];
             data[min] = tmp;
             timeouts.push(setTimeout(swap,delay*swaps, i, min));
             swaps++;
+            color[min] = null;
         }
+        color[i] = "#00FF00";
+        states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
     }
-    return data;
+    states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
+    return states;
 }
 
 /*
