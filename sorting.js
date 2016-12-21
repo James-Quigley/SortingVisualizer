@@ -1,14 +1,33 @@
 var timeouts = [];
+
+/*
+* Adds a new state to the 'states' array parameter
+*/
+function pushToStates(states, data, color){
+    states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
+}
+
 /*
 * BubbleSort sorting algorithm
 */
 function bubbleSort(array, delay) {
+    var states = [];
+    var color = {};
     var data = array.slice();
-    var n = data.length;
     var swaps = 0;
+    var n = data.length;
+    
+    //Pushes original state of data with no new colors
+    pushToStates(states, data, color);
+    
     while (n != 0){
         var newn = 0;
         for (var i = 1; i <= n-1; i++){
+            
+            color[i] = "#0000FF"; //Current item
+            color[i-1] = "#FFFF00" //Item 'current' is comparing to
+            pushToStates(states, data, color);
+            
             if (data[i-1] > data[i]) {
                 //swap data[i-1] and data[i]
                 var tmp = data[i-1];
@@ -18,7 +37,14 @@ function bubbleSort(array, delay) {
                 timeouts.push(setTimeout(swap,delay*swaps,i-1, i));
                 swaps++;
             }
+            
+            //Resets colors from current iteration
+            color[i] = null;
+            color[i-1] = null;
+            color[newn] = "#00FF00"; //Item is sorted
+            pushToStates(states, data, color);
         }
+        
         n = newn;
     }
     return data;
