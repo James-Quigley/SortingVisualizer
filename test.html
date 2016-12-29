@@ -30,10 +30,14 @@
     <button id="reset">Reset</button>
     <button id="stepBack">Back</button>
     <button id="stepNext">Next</button>
+    <button id="start">Start</button>
+    <button id="playBack">Play Backwards</button>
+    <button id="stop">Stop</button>
     <p id="debug"></p>
 
     <script>
-        var LEN = 100;
+        var LEN = 25;
+        var delay = 1;
         function randArray(length) {
             //grab the arr
             for (var arr = [], i = 0; i < length; ++i) arr[i] = i+1;
@@ -58,7 +62,7 @@
 
         //initialize two.js
         var xdef = 0;
-        var height = 500;
+        var height = 700;
         var maxWidth = window.innerWidth; //definitely look into moving into a setup() function that gets called when the window resizes
         var paddef = 1;
         var barWidth = ((maxWidth - (paddef * arr.length)) / arr.length)
@@ -81,11 +85,9 @@
             var max = Math.max(...state.data);
             var debug = document.getElementById("debug");
             for (index in state.data) {
-                var x = xdef + (barWidth * index) + (paddef * index);
+                var x = xdef + (barWidth * index) + (paddef * index) + (1/2 * barWidth);
                 //percent of the maxmimum value, scaled to total height of graph
                 var barHeight = (state.data[index] / max) * height;
-                var debstring = debstring + "value: " + state.data[index] + " percent: " + (state.data[index] / max) + " height: " + ((state.data[index] / max) * height) + "<br>";
-                debug.innerHTML = debstring;
                 var rect = two.makeRectangle(x, (height / 2) + (height / 2 - barHeight / 2) + 1, barWidth, barHeight);
                 if (state.colors[index]){
                     rect.fill = state.colors[index];
@@ -96,13 +98,29 @@
                 two.update();
             }
         }
+        var runner = null; 
         
+        function playBack(){
+            runner = setInterval(function(){console.log("stepping " + currentState);stepBack();},delay);
+            console.log("starting");
+        }
+        function start(){
+            runner = setInterval(function(){console.log("stepping " + currentState);stepNext();},delay);
+            console.log("starting");
+        }
+        function stop(){
+            clearInterval(runner);
+        }
         function stepNext(){
             if (currentState != states.length -1){
                 currentState++;
             }
             draw(states[currentState]);
             document.getElementById("currentState").value = currentState;
+            if(currentState == states.length - 1){
+                console.log("STOP NOW PLS");
+                stop();
+            }
         }
         
         function stepBack(){
@@ -111,6 +129,10 @@
             }
             draw(states[currentState]);
             document.getElementById("currentState").value = currentState;
+            if(currentState == 0){
+                console.log("STOP NOW PLS");
+                stop();
+            }
         }
         
         var obj = document.getElementById("bubble");
@@ -140,6 +162,7 @@
             draw(states[0]);
             currentState = 0;
             document.getElementById("currentState").value = currentState;
+            stop();
         });
         
         obj = document.getElementById("stepNext");
@@ -152,7 +175,20 @@
             stepBack();
         });
         
+        obj = document.getElementById("start");
+        obj.addEventListener("click", function(){
+            start();
+        })
         
+        obj = document.getElementById("stop");
+        obj.addEventListener("click", function(){
+            stop();
+        })
+        
+        obj = document.getElementById("playBack");
+        obj.addEventListener("click", function(){
+            playBack();
+        })
         
     </script>
 </body>
