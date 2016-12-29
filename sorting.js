@@ -15,7 +15,6 @@ function bubbleSort(array, delay) {
                 data[i-1] = data[i];
                 data[i] = tmp;
                 newn = i;
-                //so we're storing an array of timeout functions... This is a weird pattern, and even if it wasn't, we should be treating the timeouts like asynchronous data returns, using promises etc.
                 timeouts.push(setTimeout(swap,delay*swaps,i-1, i));
                 swaps++;
             }
