@@ -74,6 +74,7 @@
 
         var debstring = "";
 
+        //Draws the state passed as a parameter
         function draw(state) {
             console.log("Redrawing");
             two.clear();
@@ -87,6 +88,8 @@
                 var debstring = debstring + "value: " + state.data[index] + " percent: " + (state.data[index] / max) + " height: " + ((state.data[index] / max) * height) + "<br>";
                 debug.innerHTML = debstring;
                 var rect = two.makeRectangle(x, (height / 2) + (height / 2 - barHeight / 2) + 1, barWidth, barHeight);
+                
+                //If the color is null, make it default color. Else draw given color for index.
                 if (state.colors[index]){
                     rect.fill = state.colors[index];
                 } else{
@@ -97,6 +100,7 @@
             }
         }
         
+        //Step to next State
         function stepNext(){
             if (currentState != states.length -1){
                 currentState++;
@@ -105,6 +109,7 @@
             document.getElementById("currentState").value = currentState;
         }
         
+        //Go to previous State
         function stepBack(){
             if (currentState != 0) {
                 currentState--;
@@ -113,11 +118,15 @@
             document.getElementById("currentState").value = currentState;
         }
 
+        //*****************************************
+        //Button click handlers
+        //*****************************************
         var obj = document.getElementById("bubble");
         obj.addEventListener("click", function () {
             bubbleSort(arr, document.getElementById("delay").value);
         });
 
+        //set state array to the value returned by selection sort
         obj = document.getElementById("selection");
         obj.addEventListener("click", function () {
             states = selectionSort(states[currentState].data);
@@ -133,6 +142,8 @@
             combSort(arr, document.getElementById("delay").value);
         });
 
+        //reset state array. push new rand array.
+        //Draw new base array. Set currentState
         obj = document.getElementById("reset");
         obj.addEventListener("click", function () {
             states = [];
