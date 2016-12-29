@@ -1,4 +1,3 @@
-var timeouts = [];
 /*
 * BubbleSort sorting algorithm
 */
@@ -30,11 +29,10 @@ function bubbleSort(array, delay) {
 * #0000FF = current
 * #00FF00 = sorted
 */
-function selectionSort(array, delay) {
+function selectionSort(array) {
     var states = [];
     var color = {};
     var data = array.slice();
-    var swaps = 0;
     var n = data.length;
     
     states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
@@ -50,6 +48,8 @@ function selectionSort(array, delay) {
                 min = j;
                 color[j] = "#FFFF00";
                 states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
+            } else {
+                color[j] = null;
             }
         }
         color[n-1] = null;
@@ -58,13 +58,12 @@ function selectionSort(array, delay) {
             var tmp = data[i];
             data[i] = data[min];
             data[min] = tmp;
-            timeouts.push(setTimeout(swap,delay*swaps, i, min));
-            swaps++;
             color[min] = null;
         }
         color[i] = "#00FF00";
         states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
     }
+    color[n-1] = "#00FF00";
     states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
     return states;
 }
