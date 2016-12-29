@@ -6,6 +6,7 @@
     <title>TwoJS Test</title>
     <script src="two.min.js"></script>
     <script src="sorting.js"></script>
+    <script src="state.js"></script>
     <style>
         * {
             padding: 0px;
@@ -20,19 +21,22 @@
 
 <body>
     <div id="displayArea" style="background:#404040;"></div>
-    <input type="number" id="delay" min="1" max="1000" value=50>
+    <input type="number" id="delay" min=1 max="1000" value=50>
+    <input type="number" id="currentState" min=0 value=0>
     <button id="bubble">Bubble</button>
     <button id="selection">Selection</button>
     <button id="cocktail">Cocktail Shaker</button>
     <button id="comb">Comb Sort</button>
     <button id="reset">Reset</button>
+    <button id="stepBack">Back</button>
+    <button id="stepNext">Next</button>
     <p id="debug"></p>
     <script>
-        var LEN = 100;
+        var LEN = 4;
 
         function randArray(length) {
             //grab the arr
-            for (var arr = [], i = 0; i < length; ++i) arr[i] = i;
+            for (var arr = [], i = 0; i < length; ++i) arr[i] = i+1;
 
             // http://stackoverflow.com/questions/962802#962890
             var tmp, current, top = arr.length;
@@ -47,8 +51,10 @@
         }
 
         var arr = randArray(LEN);
-
-
+        var baseState = new State(arr, {});
+        var states = [];
+        states.push(baseState);
+        var currentState = 0;
 
         //initialize two.js
         var xdef = 0;
@@ -64,59 +70,66 @@
         };
         var two = new Two(params).appendTo(elem);
 
-        draw();
+        draw(baseState);
 
         var debstring = "";
 
-        function draw() {
+        //Draws the state passed as a parameter
+        function draw(state) {
             console.log("Redrawing");
             two.clear();
             //iterate through and draw it
-            var arrayOfRects = [];
-            var max = Math.max(...arr);
+            var max = Math.max(...state.data);
             var debug = document.getElementById("debug");
-            for (item in arr) {
-                var x = xdef + (barWidth * item) + (paddef * item);
+            for (index in state.data) {
+                var x = xdef + (barWidth * index) + (paddef * index);
                 //percent of the maxmimum value, scaled to total height of graph
-                var barHeight = (arr[item] / max) * height;
-                var debstring = debstring + "value: " + arr[item] + " percent: " + (arr[item] / max) + " height: " + ((arr[item] / max) * height) + "<br>";
+                var barHeight = (state.data[index] / max) * height;
+                var debstring = debstring + "value: " + state.data[index] + " percent: " + (state.data[index] / max) + " height: " + ((state.data[index] / max) * height) + "<br>";
                 debug.innerHTML = debstring;
                 var rect = two.makeRectangle(x, (height / 2) + (height / 2 - barHeight / 2) + 1, barWidth, barHeight);
-                rect.fill = primary;
+                
+                //If the color is null, make it default color. Else draw given color for index.
+                if (state.colors[index]){
+                    rect.fill = state.colors[index];
+                } else{
+                    rect.fill = primary;
+                }
                 rect.noStroke();
-                arrayOfRects.push(rect);
                 two.update();
             }
         }
-
-        function swap(i, j) {
-            var tmp = arr[i];
-            arr[i] = arr[j];
-            arr[j] = tmp;
-            draw();
-        }
-
-        function setData(arr) {
-            data = arr;
-            draw();
-        }
-
-        function stopTracked() {
-            for (var i = 0; i < timeouts.length; i++) {
-                clearTimeout(timeouts[i]);
+        
+        //Step to next State
+        function stepNext(){
+            if (currentState != states.length -1){
+                currentState++;
             }
-
-            timeouts = [];
+            draw(states[currentState]);
+            document.getElementById("currentState").value = currentState;
+        }
+        
+        //Go to previous State
+        function stepBack(){
+            if (currentState != 0) {
+                currentState--;
+            }
+            draw(states[currentState]);
+            document.getElementById("currentState").value = currentState;
         }
 
+        //*****************************************
+        //Button click handlers
+        //*****************************************
         var obj = document.getElementById("bubble");
         obj.addEventListener("click", function () {
             bubbleSort(arr, document.getElementById("delay").value);
         });
 
+        //set state array to the value returned by selection sort
         obj = document.getElementById("selection");
         obj.addEventListener("click", function () {
-            selectionSort(arr, document.getElementById("delay").value);
+            states = selectionSort(states[currentState].data);
         });
 
         obj = document.getElementById("cocktail");
@@ -129,12 +142,29 @@
             combSort(arr, document.getElementById("delay").value);
         });
 
+        //reset state array. push new rand array.
+        //Draw new base array. Set currentState
         obj = document.getElementById("reset");
         obj.addEventListener("click", function () {
-            stopTracked();
-            arr = randArray(LEN);
-            draw();
+            states = [];
+            states.push(new State(randArray(LEN),{}));
+            draw(states[0]);
+            currentState = 0;
+            document.getElementById("currentState").value = currentState;
         });
+        
+        obj = document.getElementById("stepNext");
+        obj.addEventListener("click", function () {
+            stepNext();
+        });
+        
+        obj = document.getElementById("stepBack");
+        obj.addEventListener("click", function () {
+            stepBack();
+        });
+        
+        
+        
     </script>
 </body>
 
