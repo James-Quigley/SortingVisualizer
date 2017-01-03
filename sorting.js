@@ -1,26 +1,56 @@
 /*
 * BubbleSort sorting algorithm
 */
-function bubbleSort(array, delay) {
+function bubbleSort(array) {
+    var states = [];
+    var color = {}; // Object for color
     var data = array.slice();
     var n = data.length;
     var swaps = 0;
-    while (n != 0){
+    
+    states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
+    
+    while (n != 0){ // While we are still building up the max values.
         var newn = 0;
-        for (var i = 1; i <= n-1; i++){
-            if (data[i-1] > data[i]) {
+        for (var i = 1; i <= n-1; i++){ // Iterate up to last element
+            color[i-1]
+            color[i] = "#FFFF00"        // Instantiate cursor color.
+            color[i-1] = "#0000FF";
+            
+            states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
+            if (data[i-1] > data[i]) {  // If we must swap
                 //swap data[i-1] and data[i]
-                var tmp = data[i-1];
-                data[i-1] = data[i];
-                data[i] = tmp;
-                newn = i;
-                timeouts.push(setTimeout(swap,delay*swaps,i-1, i));
-                swaps++;
+                var tmp = data[i-1];    // Store swapping value
+                data[i-1] = data[i];    // Set new min
+                data[i] = tmp;          // Set new max
+                
+                color[i-1] = "#FFFF00"; // Set yellow swap.
+                color[i] = "#0000FF";   // Set blue swap
+                
+                newn = i;               // Change index appropriately.
+                
+                states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
+            } else if ((data[i] < data[i+1]) && (data[i-1] < data[i])) {
+                color[i] = "#00FF00";
             }
+            color[i-1] = null;  // Remove cursor coloring.
+            color[n] = "#00FF00";
+            
+            states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
         }
-        n = newn;
+        // Set n to the new n designated value to determine when algorith is done looping.
+        n = newn;   
+       //color[n] = "#00FF00";
     }
-    return data;
+    // Safe handling for coloring green because of special cases
+    // where values are already less than designated value before 
+    // sorting.
+    /*for (var i = 0; i < data.length-1; i++) {
+        color[i] = "#00FF00";
+    }
+    states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
+    */
+    return states;
 }
 
 /*
