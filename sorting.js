@@ -144,17 +144,26 @@ function merge(left, right) {
 /*
 * InsertionSort sorting Algorithm
 */
-function insertionSort(data) {
+function insertionSort(array) {
+    var states = [];
+    var color = {};
+    var data = array.slice();
+    var n = data.length;
+    
+    states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
+    
     for (var i = 1; i < data.length; i++) {
         var x = data[i];
         var j = i - 1;
         while (j >= 0 && data[j] > x) {
             data[j+1] = data[j];
             j = j - 1;
+            states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
         }
         data[j+1] = x;
+        states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
     }
-    return data;
+    return states;
 }
 
 /*
@@ -195,44 +204,78 @@ function partition(data, pivot, left, right) {
 
 /*
 * Cocktail Shaker sorting algorithm
+* Finds the max moving forward, then the minimum moving backwards.
 */
 function cocktailShakerSort(array, delay){
+    var states = [];
+    var color = {};
     var data = array.slice();
-    var swaps = 0;
     //Main loop
+    
+    states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
+    
     for(var i = 0; i < data.length/2; i++){
         var swapped = false;
         
         //Sorts next, unsorted largest-value
         for(var j = i; j < data.length - i - 1; j++){
+            if (color[j-1] != "#00FF00") {  // If we haven't set sorted
+                color[j-1] = null;
+            }
+            color[j] = "#0000FF"        // Instantiate cursor color.
+            color[j+1] = "#FFFF00";
+            states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
             if(data[j] > data[j+1]){
                 var tmp = data[j];
                 data[j] = data[j+1];
                 data[j+1] = tmp;
+                color[j] = "#FFFF00";
+                color[j+1] = "#0000FF";
                 swapped = true;
                 
-                timeouts.push(setTimeout(swap, delay*swaps, j, j+1));
-                swaps++;
+                states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
             }
         }
+        // Set new max value as colored.
+        color[data.length-(i+1)] = "#00FF00";
+        states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
         
         //Sorts next, unsorted smallest-value
         for(var j = data.length - 2 - i; j > i; j--){
+            if (color[j+1] != "#00FF00") {  // If we haven't set to sorted.
+                color[j+1] = null;
+            }
+            color[j] = "#0000FF";
+            color[j-1] = "#FFFF00";
+            
+            states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
             if(data[j] < data[j-1]){
                 var tmp = data[j];
                 data[j] = data[j-1];
                 data[j-1] = tmp;
+                color[j] = "#FFFF00";
+                color[j-1] = "#0000FF";
                 swapped = true;
                 
-                timeouts.push(setTimeout(swap, delay*swaps, j, j-1));
-                swaps++;
+                
+                states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
             }
         }
+        // Set new minimum value as colored.
+        color[i] = "#00FF00";
+        states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
         
         if(!swapped) break; //If finished sorting
     }
     
-    return data;
+    // The middle of the algorithm will be sorted by this point, so
+    // we want to set it to sorted coloring.
+    for (var i = 0; i < data.length-1; i++) {
+        color[i] = "#00FF00";
+    }
+    states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
+    
+    return states;
 }
 
 /*

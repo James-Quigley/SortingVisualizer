@@ -158,7 +158,7 @@
 
         obj = document.getElementById("cocktail");
         obj.addEventListener("click", function () {
-            cocktailShakerSort(arr, document.getElementById("delay").value);
+            states = cocktailShakerSort(states[currentState].data)
         });
 
         obj = document.getElementById("comb");
