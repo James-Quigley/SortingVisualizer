@@ -147,7 +147,7 @@
         //*****************************************
         var obj = document.getElementById("bubble");
         obj.addEventListener("click", function () {
-            bubbleSort(arr, document.getElementById("delay").value);
+            states = bubbleSort(states[currentState].data);
         });
 
         //set state array to the value returned by selection sort
@@ -158,7 +158,7 @@
 
         obj = document.getElementById("cocktail");
         obj.addEventListener("click", function () {
-            cocktailShakerSort(arr, document.getElementById("delay").value);
+            states = cocktailShakerSort(states[currentState].data)
         });
 
         obj = document.getElementById("comb");
