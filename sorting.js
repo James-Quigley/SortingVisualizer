@@ -155,13 +155,35 @@ function insertionSort(array) {
     for (var i = 1; i < data.length; i++) {
         var x = data[i];
         var j = i - 1;
-        while (j >= 0 && data[j] > x) {
-            data[j+1] = data[j];
-            j = j - 1;
-            states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
-        }
-        data[j+1] = x;
+        color[j] = "#0000FF";   // Cursor 1
+        color[i] = "#FFFF00";   // Cursor 2
+        
+        
         states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
+        
+        if (data[j] > x) {
+            while (j >= 0 && data[j] > x) { // x is cursor 2.
+                data[j+1] = data[j];    // Perform swap
+                data[j] = x;
+                color[j+2] = null;
+                color[j] = "#E3463E";
+ 
+                color[j+1] = "#0000FF";    
+
+                states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
+                color[j] = null;
+                /*if (data[j] < x) {
+                    color[j+1] = null;
+                }*/
+                //color[j+1] = null;
+                j = j - 1;
+            }
+        } else {
+            data[j+1] = x;      // Complete swap, or remain same.
+        }
+        states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
+        color[i] = null;
+        color[j] = null;
     }
     return states;
 }
@@ -205,6 +227,9 @@ function partition(data, pivot, left, right) {
 /*
 * Cocktail Shaker sorting algorithm
 * Finds the max moving forward, then the minimum moving backwards.
+* #0000FF = index 1
+* #FFFF00 = index 2
+* #00FF00 = sorted
 */
 function cocktailShakerSort(array, delay){
     var states = [];
@@ -280,12 +305,20 @@ function cocktailShakerSort(array, delay){
 
 /*
 * CombSort sorting algorithm
+* #0000FF = index 1
+* #FFFF00 = index 2
+* #00FF00 = sorted
 */
-function combSort(array, delay) {
+function combSort(array) {
+    var states = [];
+    var color = {};
     var data = array.slice();
-    var swaps = 0;
+    //Main loop
+    
+    states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
+    
     var gap = data.length;
-    var shrink = 1.3;
+    var shrink = 1.3;       // Recommended scale factor.
     var sorted = false;
     while (!sorted) {
         gap = Math.floor(gap / shrink);
@@ -299,18 +332,36 @@ function combSort(array, delay) {
         
         var i = 0;
         while (i + gap < data.length) {
+            // The conditional only executes if we are to swap, which
+            // means the algorithm isn't fully sorted yet.
+            color[i] = "#0000FF"        
+            color[i+gap] = "#FFFF00";
+            states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
+            // Pushed current cursor and coloring states.
+            
             if (data[i] > data[i + gap]){
                 var tmp = data[i];
                 data[i] = data[i+gap];
                 data[i+gap] = tmp;
                 sorted = false;
                 
-                timeouts.push(setTimeout(swap, delay*swaps, i, i+gap));
-                swaps++;
+                // Set colors and push swapped state.
+                color[i] = "#FFFF00";
+                color[i+gap] = "#0000FF";
+                states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
             }
+            // Reset coloring.
+            color[i] = null;
+            color[i+gap] = null;
+            states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
             i++;
         }
     }
+    // Algorithm is sorted and we can now color in green.
+    for (var i = 0; i < data.length; i++) {
+        color[i] = "#00FF00";
+    }
+    states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
     
-    return data;
+    return states;
 }

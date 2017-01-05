@@ -21,12 +21,15 @@
 
 <body>
     <div id="displayArea" style="background:#404040;"></div>
-    <input type="number" id="delay" min=1 max="1000" value=50>
+    <label>Animation Speed: </label>
+    <input type="number" id="delay" min=1 max="1000" value=1>
+    <label>Array State: </label>
     <input type="number" id="currentState" min=0 value=0>
     <button id="bubble">Bubble</button>
     <button id="selection">Selection</button>
     <button id="cocktail">Cocktail Shaker</button>
     <button id="comb">Comb Sort</button>
+    <button id="insertion">Insertion Sort</button>
     <button id="reset">Reset</button>
     <button id="stepBack">Back</button>
     <button id="stepNext">Next</button>
@@ -37,7 +40,9 @@
 
     <script>
         var LEN = 25;
-        var delay = 1;
+        // Retrieve the animation speed integer.
+        var delay = parseInt(document.getElementById("delay").value);
+        
         function randArray(length) {
             //grab the arr
             for (var arr = [], i = 0; i < length; ++i) arr[i] = i+1;
@@ -143,27 +148,41 @@
         }
 
         //*****************************************
-        //Button click handlers
+        //  Button click handlers
+        //  We have the delay values re-assigned
+        //  inbetween function calls because we want
+        //  to have the most recent updated user
+        //  animation speed input.
         //*****************************************
         var obj = document.getElementById("bubble");
         obj.addEventListener("click", function () {
+            delay = parseInt(document.getElementById("delay").value);
             states = bubbleSort(states[currentState].data);
         });
 
         //set state array to the value returned by selection sort
         obj = document.getElementById("selection");
         obj.addEventListener("click", function () {
+            delay = parseInt(document.getElementById("delay").value);
             states = selectionSort(states[currentState].data);
         });
 
         obj = document.getElementById("cocktail");
         obj.addEventListener("click", function () {
+            delay = parseInt(document.getElementById("delay").value);
             states = cocktailShakerSort(states[currentState].data)
         });
 
         obj = document.getElementById("comb");
         obj.addEventListener("click", function () {
-            combSort(arr, document.getElementById("delay").value);
+            delay = parseInt(document.getElementById("delay").value);
+            states = combSort(states[currentState].data)
+        });
+        
+        obj = document.getElementById("insertion");
+        obj.addEventListener("click", function () {
+            delay = parseInt(document.getElementById("delay").value);
+            states = insertionSort(states[currentState].data)
         });
 
         //reset state array. push new rand array.
