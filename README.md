@@ -6,15 +6,15 @@ A web based solution to demonstrating the visualization of sorting algorithms. [
 
 ##Technologies Used
 
-*[Two.js](https://two.js.org/)
-*[MaterializeCSS](http://materializecss.com/)
+* [Two.js](https://two.js.org/)
+* [MaterializeCSS](http://materializecss.com/)
 
 ## Contributors
 
-*[James Quigley](https://github.com/James-Quigley)
-*[Alireza Bahremand](https://github.com/TheWiselyBearded)
-*[Joshua Hewlett](https://github.com/joshhewlett)
-*[Chuck Dries](https://github.com/chuckdries)
+* [James Quigley](https://github.com/James-Quigley)
+* [Alireza Bahremand](https://github.com/TheWiselyBearded)
+* [Joshua Hewlett](https://github.com/joshhewlett)
+* [Chuck Dries](https://github.com/chuckdries)
 
 ## License
 
