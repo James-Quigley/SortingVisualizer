@@ -155,36 +155,47 @@ function insertionSort(array) {
     for (var i = 1; i < data.length; i++) {
         var x = data[i];
         var j = i - 1;
+        var swapPerformed = false;
         color[j] = "#0000FF";   // Cursor 1
         color[i] = "#FFFF00";   // Cursor 2
         
         
         states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
         
-        if (data[j] > x) {
+        if (data[j] > x) {  
+            swapPerformed = true;
+        // If our cursor 2 aka x is greater than cursor 1 aka j.
             while (j >= 0 && data[j] > x) { // x is cursor 2.
+            // While we are reversing traversing array.
                 data[j+1] = data[j];    // Perform swap
-                data[j] = x;
-                color[j+2] = null;
+                data[j] = x;    
+                // Assign the value that was originally proceeding data[j] aka x
                 color[j] = "#E3463E";
- 
-                color[j+1] = "#0000FF";    
+                color[j-1] = "#0000FF"; 
+                if (color[j+1] != "#C3EA40") {
+                    color[j+1] = "#C3EA40";
+                }
 
                 states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
-                color[j] = null;
-                /*if (data[j] < x) {
-                    color[j+1] = null;
-                }*/
-                //color[j+1] = null;
+                color[j] = "#C3EA40";
+                color[j-1] = "#C3EA40";
+
                 j = j - 1;
             }
         } else {
             data[j+1] = x;      // Complete swap, or remain same.
         }
         states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
-        color[i] = null;
-        color[j] = null;
+        if (!swapPerformed) {
+            color[j] = "#C3EA40";
+        }
     }
+    // Finalized array, fill it in all green.
+    for (var i = 0; i < data.length; i++) {
+        color[i] = "#00FF00";
+    }
+    states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
+    
     return states;
 }
 
