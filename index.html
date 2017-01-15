@@ -1,11 +1,270 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Sorting Algorithm Visualizer</title>
-</head>
-<body>
-    
+    <script src="two.min.js"></script>
     <script src="sorting.js"></script>
+    <script src="state.js"></script>
+
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        * {
+            padding: 0px;
+            margin: 0px;
+        }
+        
+        div {
+            margin: 0px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="amber">
+        <div class="nav-wrapper">
+            <a href="#" class="brand-logo center">Sorting Algorithm Visualizer</a>
+        </div>
+    </nav>
+
+    <main>
+        <div id="displayArea" style="background:#404040;"></div>
+        <div class="container center-align">
+            <div class="col s12">
+                <div class="row">
+                    <div class="input-field col s3 offset-s3">
+                        <input type="number" id="currentState" min=0 value=0 disabled>
+                        <label for="currentState">Current State</label>
+                    </div>
+                    <div class="input-field col s3">
+                        <input type="number" id="delay" min=1 max="1000" value=50>
+                        <label for="delay">Animation Delay (ms)</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <button id="bubble" class="waves-effect waves-light btn blue-grey">Bubble</button>
+                    <button id="selection" class="waves-effect waves-light btn blue-grey">Selection</button>
+                    <button id="cocktail" class="waves-effect waves-light btn blue-grey">Cocktail Shaker</button>
+                    <button id="comb" class="waves-effect waves-light btn blue-grey">Comb Sort</button>
+                    <button id="insertion" class="waves-effect waves-light btn blue-grey">Insertion</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <button id="stepBack" class="waves-effect waves-light btn blue-grey"><i class="material-icons">skip_previous</i></button>
+                    <button id="playBack" class="waves-effect waves-light btn blue-grey"><i class="material-icons">fast_rewind</i></button>
+                    <button id="stop" class="waves-effect waves-light btn red"><i class="material-icons">stop</i></button>
+                    <button id="start" class="waves-effect waves-light btn green"><i class="material-icons">play_arrow</i></button>
+                    <button id="stepNext" class="waves-effect waves-light btn blue-grey"><i class="material-icons">skip_next</i></button>
+                    <button id="reset" class="waves-effect waves-light btn blue-grey"><i class="material-icons">replay</i></button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+
+    </footer>
+    <!-- Compiled and minified JavaScript -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+
+    <script>
+        var LEN = 25;
+        // Retrieve the animation speed integer.
+        var delay = parseInt(document.getElementById("delay").value);
+
+        function randArray(length) {
+            //grab the arr
+            for (var arr = [], i = 0; i < length; ++i) arr[i] = i + 1;
+
+            // http://stackoverflow.com/questions/962802#962890
+            var tmp, current, top = arr.length;
+            if (top)
+                while (--top) {
+                    current = Math.floor(Math.random() * (top + 1));
+                    tmp = arr[current];
+                    arr[current] = arr[top];
+                    arr[top] = tmp;
+                }
+            return arr;
+        }
+
+        var arr = randArray(LEN);
+        var baseState = new State(arr, {});
+        var states = [];
+        states.push(baseState);
+        var currentState = 0;
+
+        //initialize two.js
+        var xdef = 0;
+        var height = 500;
+        var maxWidth = window.innerWidth; //definitely look into moving into a setup() function that gets called when the window resizes
+        var paddef = 1;
+        var barWidth = ((maxWidth - (paddef * arr.length)) / arr.length)
+        var primary = "#ffffff";
+        var elem = document.getElementById("displayArea");
+        var params = {
+            width: maxWidth,
+            height: height
+        };
+        var two = new Two(params).appendTo(elem);
+
+        draw(baseState);
+
+        var debstring = "";
+
+        //Draws the state passed as a parameter
+        function draw(state) {
+            console.log("Redrawing");
+            two.clear();
+            //iterate through and draw it
+            var max = Math.max(...state.data);
+            var debug = document.getElementById("debug");
+            for (index in state.data) {
+                var x = xdef + (barWidth * index) + (paddef * index) + (1 / 2 * barWidth);
+                //percent of the maxmimum value, scaled to total height of graph
+                var barHeight = (state.data[index] / max) * height;
+                var rect = two.makeRectangle(x, (height / 2) + (height / 2 - barHeight / 2) + 1, barWidth, barHeight);
+
+                //If the color is null, make it default color. Else draw given color for index.
+                if (state.colors[index]) {
+                    rect.fill = state.colors[index];
+                } else {
+                    rect.fill = primary;
+                }
+                rect.noStroke();
+                two.update();
+            }
+        }
+        var runner = null;
+
+        function playBack() {
+            runner = setInterval(function () {
+                console.log("stepping " + currentState);
+                stepBack();
+            }, delay);
+            console.log("starting");
+        }
+
+        function start() {
+            runner = setInterval(function () {
+                console.log("stepping " + currentState);
+                stepNext();
+            }, delay);
+            console.log("starting");
+        }
+
+        function stop() {
+            clearInterval(runner);
+        }
+
+        //Step to next State
+
+        function stepNext() {
+            if (currentState != states.length - 1) {
+                currentState++;
+            }
+            draw(states[currentState]);
+            document.getElementById("currentState").value = currentState;
+            if (currentState == states.length - 1) {
+                console.log("STOP NOW PLS");
+                stop();
+            }
+        }
+
+        //Go to previous State
+        function stepBack() {
+            if (currentState != 0) {
+                currentState--;
+            }
+            draw(states[currentState]);
+            document.getElementById("currentState").value = currentState;
+            if (currentState == 0) {
+                console.log("STOP NOW PLS");
+                stop();
+            }
+        }
+
+        //*****************************************
+        //  Button click handlers
+        //  We have the delay values re-assigned
+        //  inbetween function calls because we want
+        //  to have the most recent updated user
+        //  animation speed input.
+        //*****************************************
+        var obj = document.getElementById("bubble");
+        obj.addEventListener("click", function () {
+            delay = parseInt(document.getElementById("delay").value);
+            states = bubbleSort(states[currentState].data);
+        });
+
+        //set state array to the value returned by selection sort
+        obj = document.getElementById("selection");
+        obj.addEventListener("click", function () {
+            delay = parseInt(document.getElementById("delay").value);
+            states = selectionSort(states[currentState].data);
+        });
+
+        obj = document.getElementById("cocktail");
+        obj.addEventListener("click", function () {
+            delay = parseInt(document.getElementById("delay").value);
+            states = cocktailShakerSort(states[currentState].data)
+        });
+
+        obj = document.getElementById("comb");
+        obj.addEventListener("click", function () {
+            delay = parseInt(document.getElementById("delay").value);
+            states = combSort(states[currentState].data)
+        });
+
+        obj = document.getElementById("insertion");
+        obj.addEventListener("click", function () {
+            delay = parseInt(document.getElementById("delay").value);
+            states = insertionSort(states[currentState].data)
+        });
+
+        //reset state array. push new rand array.
+        //Draw new base array. Set currentState
+        obj = document.getElementById("reset");
+        obj.addEventListener("click", function () {
+            states = [];
+            states.push(new State(randArray(LEN), {}));
+            draw(states[0]);
+            currentState = 0;
+            document.getElementById("currentState").value = currentState;
+            stop();
+        });
+
+        obj = document.getElementById("stepNext");
+        obj.addEventListener("click", function () {
+            stepNext();
+        });
+
+        obj = document.getElementById("stepBack");
+        obj.addEventListener("click", function () {
+            stepBack();
+        });
+
+        obj = document.getElementById("start");
+        obj.addEventListener("click", function () {
+            start();
+        })
+
+        obj = document.getElementById("stop");
+        obj.addEventListener("click", function () {
+            stop();
+        })
+
+        obj = document.getElementById("playBack");
+        obj.addEventListener("click", function () {
+            playBack();
+        })
+    </script>
 </body>
+
 </html>
