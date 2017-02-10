@@ -74,10 +74,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
 
     <script>
-        $(document).ready(function(){
-          $("#bubble").trigger("click");
-        });
-
         var LEN = 25;
         // Retrieve the animation speed integer.
         var delay = parseInt(document.getElementById("delay").value);
@@ -98,27 +94,41 @@
             return arr;
         }
 
+
         var arr = randArray(LEN);
         var baseState = new State(arr, {});
         var states = [];
         states.push(baseState);
         var currentState = 0;
+        var two, xdef, maxWidth, paddef, barWidth, primary;
 
-        //initialize two.js
-        var xdef = 0;
-        var height = 500;
-        var maxWidth = window.innerWidth; //definitely look into moving into a setup() function that gets called when the window resizes
-        var paddef = 1;
-        var barWidth = ((maxWidth - (paddef * arr.length)) / arr.length)
-        var primary = "#ffffff";
-        var elem = document.getElementById("displayArea");
-        var params = {
-            width: maxWidth,
-            height: height
-        };
-        var two = new Two(params).appendTo(elem);
+        $(document).ready(function(){
+          $("#bubble").trigger("click");
+          init();
+          draw(baseState);
+        });
 
-        draw(baseState);
+        $(window).resize(function (){
+          $("#displayArea").empty();
+          init();
+          draw(states[currentState]);
+        });
+
+        function init(){
+          //initialize two.js
+          xdef = 0;
+          height = 500;
+          maxWidth = window.innerWidth; //definitely look into moving into a setup() function that gets called when the window resizes
+          paddef = 1;
+          barWidth = ((maxWidth - (paddef * arr.length)) / arr.length)
+          primary = "#ffffff";
+          var elem = document.getElementById("displayArea");
+          var params = {
+              width: maxWidth,
+              height: height
+          };
+          two = new Two(params).appendTo(elem);
+        }
 
         var debstring = "";
 
@@ -165,6 +175,7 @@
 
         function stop() {
             clearInterval(runner);
+            $("#start").removeClass("disabled");
         }
 
         //Step to next State
@@ -208,6 +219,7 @@
         //*****************************************
         var obj = document.getElementById("bubble");
         obj.addEventListener("click", function () {
+            $("#reset").trigger("click");
             enableAllButtons();
             $("#bubble").addClass("disabled");
             delay = parseInt(document.getElementById("delay").value);
@@ -217,6 +229,7 @@
         //set state array to the value returned by selection sort
         obj = document.getElementById("selection");
         obj.addEventListener("click", function () {
+            $("#reset").trigger("click");
             enableAllButtons();
             $("#selection").addClass("disabled");
             delay = parseInt(document.getElementById("delay").value);
@@ -225,6 +238,7 @@
 
         obj = document.getElementById("cocktail");
         obj.addEventListener("click", function () {
+            $("#reset").trigger("click");
             enableAllButtons();
             $("#cocktail").addClass("disabled");
             delay = parseInt(document.getElementById("delay").value);
@@ -233,6 +247,7 @@
 
         obj = document.getElementById("comb");
         obj.addEventListener("click", function () {
+            $("#reset").trigger("click");
             enableAllButtons();
             $("#comb").addClass("disabled");
             delay = parseInt(document.getElementById("delay").value);
@@ -241,6 +256,7 @@
 
         obj = document.getElementById("insertion");
         obj.addEventListener("click", function () {
+            $("#reset").trigger("click");
             enableAllButtons();
             $("#insertion").addClass("disabled");
             delay = parseInt(document.getElementById("delay").value);
@@ -257,21 +273,25 @@
             draw(states[0]);
             currentState = 0;
             document.getElementById("currentState").value = currentState;
-            $(".disabled").trigger("click");
+            $(".disabled").first().trigger("click");
         });
 
         obj = document.getElementById("stepNext");
         obj.addEventListener("click", function () {
+            stop();
             stepNext();
         });
 
         obj = document.getElementById("stepBack");
         obj.addEventListener("click", function () {
+            stop();
             stepBack();
         });
 
         obj = document.getElementById("start");
         obj.addEventListener("click", function () {
+            stop();
+            $("#start").addClass("disabled");
             start();
         })
 
@@ -282,6 +302,7 @@
 
         obj = document.getElementById("playBack");
         obj.addEventListener("click", function () {
+            stop();
             playBack();
         })
     </script>
