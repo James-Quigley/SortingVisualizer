@@ -16,7 +16,7 @@
             padding: 0px;
             margin: 0px;
         }
-        
+
         div {
             margin: 0px;
         }
@@ -47,11 +47,11 @@
             </div>
             <div class="row">
                 <div class="col s12">
-                    <button id="bubble" class="waves-effect waves-light btn blue-grey">Bubble</button>
-                    <button id="selection" class="waves-effect waves-light btn blue-grey">Selection</button>
-                    <button id="cocktail" class="waves-effect waves-light btn blue-grey">Cocktail Shaker</button>
-                    <button id="comb" class="waves-effect waves-light btn blue-grey">Comb Sort</button>
-                    <button id="insertion" class="waves-effect waves-light btn blue-grey">Insertion</button>
+                    <button id="bubble" class="alg waves-effect waves-light btn blue-grey">Bubble</button>
+                    <button id="selection" class="alg waves-effect waves-light btn blue-grey">Selection</button>
+                    <button id="cocktail" class="alg waves-effect waves-light btn blue-grey">Cocktail Shaker</button>
+                    <button id="comb" class="alg waves-effect waves-light btn blue-grey">Comb Sort</button>
+                    <button id="insertion" class="alg waves-effect waves-light btn blue-grey">Insertion</button>
                 </div>
             </div>
             <div class="row">
@@ -74,6 +74,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
 
     <script>
+        $(document).ready(function(){
+          $("#bubble").trigger("click");
+        });
+
         var LEN = 25;
         // Retrieve the animation speed integer.
         var delay = parseInt(document.getElementById("delay").value);
@@ -190,6 +194,11 @@
             }
         }
 
+        function enableAllButtons(){
+          $(".alg").each(function(){
+            $(this).removeClass("disabled");
+          });
+        }
         //*****************************************
         //  Button click handlers
         //  We have the delay values re-assigned
@@ -199,6 +208,8 @@
         //*****************************************
         var obj = document.getElementById("bubble");
         obj.addEventListener("click", function () {
+            enableAllButtons();
+            $("#bubble").addClass("disabled");
             delay = parseInt(document.getElementById("delay").value);
             states = bubbleSort(states[currentState].data);
         });
@@ -206,24 +217,32 @@
         //set state array to the value returned by selection sort
         obj = document.getElementById("selection");
         obj.addEventListener("click", function () {
+            enableAllButtons();
+            $("#selection").addClass("disabled");
             delay = parseInt(document.getElementById("delay").value);
             states = selectionSort(states[currentState].data);
         });
 
         obj = document.getElementById("cocktail");
         obj.addEventListener("click", function () {
+            enableAllButtons();
+            $("#cocktail").addClass("disabled");
             delay = parseInt(document.getElementById("delay").value);
             states = cocktailShakerSort(states[currentState].data)
         });
 
         obj = document.getElementById("comb");
         obj.addEventListener("click", function () {
+            enableAllButtons();
+            $("#comb").addClass("disabled");
             delay = parseInt(document.getElementById("delay").value);
             states = combSort(states[currentState].data)
         });
 
         obj = document.getElementById("insertion");
         obj.addEventListener("click", function () {
+            enableAllButtons();
+            $("#insertion").addClass("disabled");
             delay = parseInt(document.getElementById("delay").value);
             states = insertionSort(states[currentState].data)
         });
@@ -232,12 +251,13 @@
         //Draw new base array. Set currentState
         obj = document.getElementById("reset");
         obj.addEventListener("click", function () {
+            stop();
             states = [];
             states.push(new State(randArray(LEN), {}));
             draw(states[0]);
             currentState = 0;
             document.getElementById("currentState").value = currentState;
-            stop();
+            $(".disabled").trigger("click");
         });
 
         obj = document.getElementById("stepNext");
