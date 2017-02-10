@@ -33,17 +33,23 @@
     <main>
         <div id="displayArea" style="background:#404040;"></div>
         <div class="container center-align">
-            <div class="col s12">
-                <div class="row">
-                    <div class="input-field col s3 offset-s3">
-                        <input type="number" id="currentState" min=0 value=0 disabled>
-                        <label for="currentState">Current State</label>
-                    </div>
-                    <div class="input-field col s3">
-                        <input type="number" id="delay" min=1 max="1000" value=50>
-                        <label for="delay">Animation Delay (ms)</label>
-                    </div>
-                </div>
+            <div class="row">
+              <div class="col s12">
+                  <div class="row">
+                      <div class="col s3 offset-s3">
+                          <label for="currentState">Current State</label>
+                          <p class="range-field" id="currentStateRange">
+                              <input type="range" id="currentState" value="0" min="0" max="100" />
+                          </p>
+                      </div>
+                      <div class="col s3">
+                          <label for="delay">Animation Delay (ms)</label>
+                          <p class="range-field" id="delayRange">
+                              <input type="range" id="delay" value="50" min="1" max="1000" />
+                          </p>
+                      </div>
+                  </div>
+              </div>
             </div>
             <div class="row">
                 <div class="col s12">
@@ -76,7 +82,7 @@
     <script>
         var LEN = 25;
         // Retrieve the animation speed integer.
-        var delay = parseInt(document.getElementById("delay").value);
+        var delay = $("#delay").val();
 
         function randArray(length) {
             //grab the arr
@@ -112,6 +118,17 @@
           $("#displayArea").empty();
           init();
           draw(states[currentState]);
+        });
+
+        $("#currentState").change(function(){
+          stop();
+          currentState = $(this).val();
+          draw(states[currentState]);
+        });
+
+        $("#delay").change(function(){
+          stop();
+          delay = $(this).val();
         });
 
         function init(){
@@ -185,7 +202,7 @@
                 currentState++;
             }
             draw(states[currentState]);
-            document.getElementById("currentState").value = currentState;
+            $("#currentState").val(currentState);
             if (currentState == states.length - 1) {
                 console.log("STOP NOW PLS");
                 stop();
@@ -198,7 +215,7 @@
                 currentState--;
             }
             draw(states[currentState]);
-            document.getElementById("currentState").value = currentState;
+            $("#currentState").val(currentState);
             if (currentState == 0) {
                 console.log("STOP NOW PLS");
                 stop();
@@ -222,8 +239,8 @@
             $("#reset").trigger("click");
             enableAllButtons();
             $("#bubble").addClass("disabled");
-            delay = parseInt(document.getElementById("delay").value);
             states = bubbleSort(states[currentState].data);
+            $("#currentState").prop('max', states.length - 1);
         });
 
         //set state array to the value returned by selection sort
@@ -232,8 +249,8 @@
             $("#reset").trigger("click");
             enableAllButtons();
             $("#selection").addClass("disabled");
-            delay = parseInt(document.getElementById("delay").value);
             states = selectionSort(states[currentState].data);
+            $("#currentState").prop('max', states.length - 1);
         });
 
         obj = document.getElementById("cocktail");
@@ -241,8 +258,8 @@
             $("#reset").trigger("click");
             enableAllButtons();
             $("#cocktail").addClass("disabled");
-            delay = parseInt(document.getElementById("delay").value);
-            states = cocktailShakerSort(states[currentState].data)
+            states = cocktailShakerSort(states[currentState].data);
+            $("#currentState").prop('max', states.length - 1);
         });
 
         obj = document.getElementById("comb");
@@ -250,8 +267,8 @@
             $("#reset").trigger("click");
             enableAllButtons();
             $("#comb").addClass("disabled");
-            delay = parseInt(document.getElementById("delay").value);
-            states = combSort(states[currentState].data)
+            states = combSort(states[currentState].data);
+            $("#currentState").prop('max', states.length - 1);
         });
 
         obj = document.getElementById("insertion");
@@ -259,8 +276,8 @@
             $("#reset").trigger("click");
             enableAllButtons();
             $("#insertion").addClass("disabled");
-            delay = parseInt(document.getElementById("delay").value);
-            states = insertionSort(states[currentState].data)
+            states = insertionSort(states[currentState].data);
+            $("#currentState").prop('max', states.length - 1);
         });
 
         //reset state array. push new rand array.
@@ -272,7 +289,7 @@
             states.push(new State(randArray(LEN), {}));
             draw(states[0]);
             currentState = 0;
-            document.getElementById("currentState").value = currentState;
+            $("#currentState").val(0);
             $(".disabled").first().trigger("click");
         });
 
