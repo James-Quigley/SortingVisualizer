@@ -56,8 +56,9 @@
                     <button id="bubble" class="alg waves-effect waves-light btn blue-grey">Bubble</button>
                     <button id="selection" class="alg waves-effect waves-light btn blue-grey">Selection</button>
                     <button id="cocktail" class="alg waves-effect waves-light btn blue-grey">Cocktail Shaker</button>
-                    <button id="comb" class="alg waves-effect waves-light btn blue-grey">Comb Sort</button>
+                    <button id="comb" class="alg waves-effect waves-light btn blue-grey">Comb</button>
                     <button id="insertion" class="alg waves-effect waves-light btn blue-grey">Insertion</button>
+                    <button id="quick" class="alg waves-effect waves-light btn blue-grey">Quick</button>
                 </div>
             </div>
             <div class="row">
@@ -277,6 +278,15 @@
             enableAllButtons();
             $("#insertion").addClass("disabled");
             states = insertionSort(states[currentState].data);
+            $("#currentState").prop('max', states.length - 1);
+        });
+
+        obj = document.getElementById("quick");
+        obj.addEventListener("click", function () {
+            $("#reset").trigger("click");
+            enableAllButtons();
+            $("#quick").addClass("disabled");
+            states = startQuickSort(states[currentState].data, 0, states[currentState].data.length - 1);
             $("#currentState").prop('max', states.length - 1);
         });
 
