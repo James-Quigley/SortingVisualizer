@@ -34,28 +34,28 @@
         <div id="displayArea" style="background:#404040;"></div>
         <div class="container center-align">
             <div class="row">
-              <div class="col s12">
-                  <div class="row">
-                      <div class="col s4">
-                          <label for="currentState">Current State</label>
-                          <p class="range-field" id="currentStateRange">
-                              <input type="range" id="currentState" value="0" min="0" max="100" />
-                          </p>
-                      </div>
-                      <div class="col s4">
-                          <label for="delay">Animation Delay (ms)</label>
-                          <p class="range-field" id="delayRange">
-                              <input type="range" id="delay" value="50" min="1" max="1000" />
-                          </p>
-                      </div>
-                      <div class="col s4">
-                          <label for="numElements">Number of Elements</label>
-                          <p class="range-field" id="numElementsRange">
-                              <input type="range" id="numElements" value="25" min="2" max="200" />
-                          </p>
-                      </div>
-                  </div>
-              </div>
+                <div class="col s12">
+                    <div class="row">
+                        <div class="col s4">
+                            <label for="currentState">Current State</label>
+                            <p class="range-field" id="currentStateRange">
+                                <input type="range" id="currentState" value="0" min="0" max="100" />
+                            </p>
+                        </div>
+                        <div class="col s4">
+                            <label for="delay">Animation Delay (ms)</label>
+                            <p class="range-field" id="delayRange">
+                                <input type="range" id="delay" value="50" min="1" max="1000" />
+                            </p>
+                        </div>
+                        <div class="col s4">
+                            <label for="numElements">Number of Elements</label>
+                            <p class="range-field" id="numElementsRange">
+                                <input type="range" id="numElements" value="25" min="2" max="200" />
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="row">
                 <div class="col s12">
@@ -65,6 +65,7 @@
                     <button id="comb" class="alg waves-effect waves-light btn blue-grey">Comb</button>
                     <button id="insertion" class="alg waves-effect waves-light btn blue-grey">Insertion</button>
                     <button id="quick" class="alg waves-effect waves-light btn blue-grey">Quick</button>
+                    <button id="radixLSD" class="alg waves-effect waves-light btn blue-grey">Radix (LSD)</button>
                 </div>
             </div>
             <div class="row">
@@ -115,52 +116,52 @@
         var currentState = 0;
         var two, xdef, maxWidth, paddef, barWidth, primary;
 
-        $(document).ready(function(){
-          $("#bubble").trigger("click");
-          init();
-          draw(baseState);
+        $(document).ready(function() {
+            $("#bubble").trigger("click");
+            init();
+            draw(baseState);
         });
 
-        $(window).resize(function (){
-          $("#displayArea").empty();
-          init();
-          draw(states[currentState]);
+        $(window).resize(function() {
+            $("#displayArea").empty();
+            init();
+            draw(states[currentState]);
         });
 
-        $("#currentState").change(function(){
-          stop();
-          currentState = $(this).val();
-          draw(states[currentState]);
+        $("#currentState").change(function() {
+            stop();
+            currentState = $(this).val();
+            draw(states[currentState]);
         });
 
-        $("#delay").change(function(){
-          stop();
-          delay = $(this).val();
+        $("#delay").change(function() {
+            stop();
+            delay = $(this).val();
         });
 
-        $("#numElements").change(function(){
-          stop();
-          LEN = $(this).val();
-          $("#reset").trigger("click");
-          $("#displayArea").empty();
-          init();
-          draw(states[currentState]);
+        $("#numElements").change(function() {
+            stop();
+            LEN = $(this).val();
+            $("#reset").trigger("click");
+            $("#displayArea").empty();
+            init();
+            draw(states[currentState]);
         });
 
-        function init(){
-          //initialize two.js
-          xdef = 0;
-          height = 500;
-          maxWidth = window.innerWidth; //definitely look into moving into a setup() function that gets called when the window resizes
-          paddef = 1;
-          barWidth = ((maxWidth - (paddef * LEN)) / LEN)
-          primary = "#ffffff";
-          var elem = document.getElementById("displayArea");
-          var params = {
-              width: maxWidth,
-              height: height
-          };
-          two = new Two(params).appendTo(elem);
+        function init() {
+            //initialize two.js
+            xdef = 0;
+            height = 500;
+            maxWidth = window.innerWidth; //definitely look into moving into a setup() function that gets called when the window resizes
+            paddef = 1;
+            barWidth = ((maxWidth - (paddef * LEN)) / LEN)
+            primary = "#ffffff";
+            var elem = document.getElementById("displayArea");
+            var params = {
+                width: maxWidth,
+                height: height
+            };
+            two = new Two(params).appendTo(elem);
         }
 
         var debstring = "";
@@ -191,7 +192,7 @@
         var runner = null;
 
         function playBack() {
-            runner = setInterval(function () {
+            runner = setInterval(function() {
                 console.log("stepping " + currentState);
                 stepBack();
             }, delay);
@@ -199,7 +200,7 @@
         }
 
         function start() {
-            runner = setInterval(function () {
+            runner = setInterval(function() {
                 console.log("stepping " + currentState);
                 stepNext();
             }, delay);
@@ -238,10 +239,10 @@
             }
         }
 
-        function enableAllButtons(){
-          $(".alg").each(function(){
-            $(this).removeClass("disabled");
-          });
+        function enableAllButtons() {
+            $(".alg").each(function() {
+                $(this).removeClass("disabled");
+            });
         }
         //*****************************************
         //  Button click handlers
@@ -251,7 +252,7 @@
         //  animation speed input.
         //*****************************************
         var obj = document.getElementById("bubble");
-        obj.addEventListener("click", function () {
+        obj.addEventListener("click", function() {
             $("#reset").trigger("click");
             enableAllButtons();
             $("#bubble").addClass("disabled");
@@ -261,7 +262,7 @@
 
         //set state array to the value returned by selection sort
         obj = document.getElementById("selection");
-        obj.addEventListener("click", function () {
+        obj.addEventListener("click", function() {
             $("#reset").trigger("click");
             enableAllButtons();
             $("#selection").addClass("disabled");
@@ -270,7 +271,7 @@
         });
 
         obj = document.getElementById("cocktail");
-        obj.addEventListener("click", function () {
+        obj.addEventListener("click", function() {
             $("#reset").trigger("click");
             enableAllButtons();
             $("#cocktail").addClass("disabled");
@@ -279,7 +280,7 @@
         });
 
         obj = document.getElementById("comb");
-        obj.addEventListener("click", function () {
+        obj.addEventListener("click", function() {
             $("#reset").trigger("click");
             enableAllButtons();
             $("#comb").addClass("disabled");
@@ -288,7 +289,7 @@
         });
 
         obj = document.getElementById("insertion");
-        obj.addEventListener("click", function () {
+        obj.addEventListener("click", function() {
             $("#reset").trigger("click");
             enableAllButtons();
             $("#insertion").addClass("disabled");
@@ -297,7 +298,7 @@
         });
 
         obj = document.getElementById("quick");
-        obj.addEventListener("click", function () {
+        obj.addEventListener("click", function() {
             $("#reset").trigger("click");
             enableAllButtons();
             $("#quick").addClass("disabled");
@@ -305,10 +306,19 @@
             $("#currentState").prop('max', states.length - 1);
         });
 
+        obj = document.getElementById("radixLSD");
+        obj.addEventListener("click", function() {
+            $("#reset").trigger("click");
+            enableAllButtons();
+            $("#radixLSD").addClass("disabled");
+            states = radixSortLSD(states[currentState].data);
+            $("#currentState").prop('max', states.length - 1);
+        })
+
         //reset state array. push new rand array.
         //Draw new base array. Set currentState
         obj = document.getElementById("reset");
-        obj.addEventListener("click", function () {
+        obj.addEventListener("click", function() {
             stop();
             states = [];
             states.push(new State(randArray(LEN), {}));
@@ -319,31 +329,31 @@
         });
 
         obj = document.getElementById("stepNext");
-        obj.addEventListener("click", function () {
+        obj.addEventListener("click", function() {
             stop();
             stepNext();
         });
 
         obj = document.getElementById("stepBack");
-        obj.addEventListener("click", function () {
+        obj.addEventListener("click", function() {
             stop();
             stepBack();
         });
 
         obj = document.getElementById("start");
-        obj.addEventListener("click", function () {
+        obj.addEventListener("click", function() {
             stop();
             $("#start").addClass("disabled");
             start();
         })
 
         obj = document.getElementById("stop");
-        obj.addEventListener("click", function () {
+        obj.addEventListener("click", function() {
             stop();
         })
 
         obj = document.getElementById("playBack");
-        obj.addEventListener("click", function () {
+        obj.addEventListener("click", function() {
             stop();
             playBack();
         })
