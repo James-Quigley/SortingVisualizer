@@ -66,6 +66,7 @@
                     <button id="insertion" class="alg waves-effect waves-light btn blue-grey">Insertion</button>
                     <button id="quick" class="alg waves-effect waves-light btn blue-grey">Quick</button>
                     <button id="radixLSD" class="alg waves-effect waves-light btn blue-grey">Radix (LSD)</button>
+                    <button id="heap" class="alg waves-effect waves-light btn blue-grey">Heap</button>
                 </div>
             </div>
             <div class="row">
@@ -313,7 +314,16 @@
             $("#radixLSD").addClass("disabled");
             states = radixSortLSD(states[currentState].data);
             $("#currentState").prop('max', states.length - 1);
-        })
+        });
+
+        obj = document.getElementById("heap");
+        obj.addEventListener("click", function() {
+            $("#reset").trigger("click");
+            enableAllButtons();
+            $("#heap").addClass("disabled");
+            states = heapSort(states[currentState].data);
+            $("#currentState").prop('max', states.length - 1);
+        });
 
         //reset state array. push new rand array.
         //Draw new base array. Set currentState
