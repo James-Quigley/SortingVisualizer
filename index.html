@@ -36,16 +36,22 @@
             <div class="row">
               <div class="col s12">
                   <div class="row">
-                      <div class="col s3 offset-s3">
+                      <div class="col s4">
                           <label for="currentState">Current State</label>
                           <p class="range-field" id="currentStateRange">
                               <input type="range" id="currentState" value="0" min="0" max="100" />
                           </p>
                       </div>
-                      <div class="col s3">
+                      <div class="col s4">
                           <label for="delay">Animation Delay (ms)</label>
                           <p class="range-field" id="delayRange">
                               <input type="range" id="delay" value="50" min="1" max="1000" />
+                          </p>
+                      </div>
+                      <div class="col s4">
+                          <label for="numElements">Number of Elements</label>
+                          <p class="range-field" id="numElementsRange">
+                              <input type="range" id="numElements" value="25" min="2" max="200" />
                           </p>
                       </div>
                   </div>
@@ -132,13 +138,22 @@
           delay = $(this).val();
         });
 
+        $("#numElements").change(function(){
+          stop();
+          LEN = $(this).val();
+          $("#reset").trigger("click");
+          $("#displayArea").empty();
+          init();
+          draw(states[currentState]);
+        });
+
         function init(){
           //initialize two.js
           xdef = 0;
           height = 500;
           maxWidth = window.innerWidth; //definitely look into moving into a setup() function that gets called when the window resizes
           paddef = 1;
-          barWidth = ((maxWidth - (paddef * arr.length)) / arr.length)
+          barWidth = ((maxWidth - (paddef * LEN)) / LEN)
           primary = "#ffffff";
           var elem = document.getElementById("displayArea");
           var params = {
