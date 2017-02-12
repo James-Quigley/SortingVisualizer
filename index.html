@@ -66,6 +66,7 @@
                     <button id="insertion" class="alg waves-effect waves-light btn blue-grey">Insertion</button>
                     <button id="quick" class="alg waves-effect waves-light btn blue-grey">Quick</button>
                     <button id="radixLSD" class="alg waves-effect waves-light btn blue-grey">Radix (LSD)</button>
+                    <button id="radixMSD" class="alg waves-effect waves-light btn blue-grey">Radix (MSD)</button>
                     <button id="heap" class="alg waves-effect waves-light btn blue-grey">Heap</button>
                 </div>
             </div>
@@ -313,6 +314,15 @@
             enableAllButtons();
             $("#radixLSD").addClass("disabled");
             states = radixSortLSD(states[currentState].data);
+            $("#currentState").prop('max', states.length - 1);
+        });
+
+        obj = document.getElementById("radixMSD");
+        obj.addEventListener("click", function() {
+            $("#reset").trigger("click");
+            enableAllButtons();
+            $("#radixMSD").addClass("disabled");
+            states = startRadixSortMSD(states[currentState].data);
             $("#currentState").prop('max', states.length - 1);
         });
 

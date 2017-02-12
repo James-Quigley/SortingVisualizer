@@ -454,6 +454,52 @@ function radixSortLSD(array) {
     return states;
 }
 
+function startRadixSortMSD(array) {
+    var states = [];
+    var color = {};
+    var data = array.slice();
+    states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
+    radixSortMSD(data, states, color);
+    // Finalized array, fill it in all green.
+    for (var i = 0; i < data.length; i++) {
+        color[i] = "#00FF00";
+    }
+    states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
+    return states;
+}
+
+//http://jsperf.com/radix-sort
+function radixSortMSD(data, states, color, idx_begin, idx_end, bit) {
+    if (!Array.isArray(data)) return;
+    idx_begin = (typeof idx_begin === 'undefined') ? 0 : idx_begin;
+    idx_end = (typeof idx_end === 'undefined') ? data.length : idx_end;
+    bit = (typeof bit === 'undefined') ? 31 : bit;
+    if (idx_begin >= (idx_end - 1) || bit < 0) {
+        return;
+    }
+    var idx = idx_begin;
+    var idx_ones = idx_end;
+    mask = 0x1 << bit;
+    while (idx < idx_ones) {
+        if (data[idx] & mask) {
+            --idx_ones;
+            color[idx] = "#FFFF00";
+            color[idx_ones] = "#0000FF";
+            states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
+            var tmp = data[idx];
+            data[idx] = data[idx_ones];
+            data[idx_ones] = tmp;
+            color[idx] = null;
+            color[idx_ones] = null;
+            states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
+        } else {
+            ++idx;
+        }
+    }
+    radixSortMSD(data, states, color, idx_begin, idx_ones, bit - 1);
+    radixSortMSD(data, states, color, idx_ones, idx_end, bit - 1);
+}
+
 //http://forum.kirupa.com/t/heapsort-implementation-in-javascript/633430
 var arrayLength;
 
