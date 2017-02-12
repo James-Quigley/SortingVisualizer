@@ -453,3 +453,63 @@ function radixSortLSD(array) {
     states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
     return states;
 }
+
+//http://forum.kirupa.com/t/heapsort-implementation-in-javascript/633430
+var arrayLength;
+
+function buildHeap(input, states, color) {
+    arrayLength = input.length;
+
+    for (var i = Math.floor(arrayLength / 2); i >= 0; i -= 1) {
+        heapify(input, i, states, color);
+    }
+
+}
+
+function heapify(input, i, states, color) {
+    var left = 2 * i + 1;
+    var right = 2 * i + 2;
+    var largest = i;
+
+    if (left < arrayLength && input[left] > input[largest]) {
+        largest = left;
+    }
+
+    if (right < arrayLength && input[right] > input[largest]) {
+        largest = right;
+    }
+
+    if (largest != i) {
+        swap(input, i, largest, states, color);
+        heapify(input, largest, states, color);
+    }
+}
+
+function swap(input, index_A, index_B, states, color) {
+    color[index_A] = "#FFFF00";
+    color[index_B] = "#0000FF";
+    states.push(new State(input.slice(), JSON.parse(JSON.stringify(color))));
+    var temp = input[index_A];
+    input[index_A] = input[index_B];
+    input[index_B] = temp;
+    states.push(new State(input.slice(), JSON.parse(JSON.stringify(color))));
+    color[index_A] = null;
+    color[index_B] = null;
+}
+
+function heapSort(array) {
+    var states = [];
+    var color = {};
+    var data = array.slice();
+    states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
+    buildHeap(data, states, color);
+
+    for (var i = data.length - 1; i >= 0; i--) {
+        swap(data, 0, i, states, color);
+        color[i] = "#00FF00";
+        states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
+        arrayLength--;
+        heapify(data, 0, states, color);
+    }
+    return states;
+}
