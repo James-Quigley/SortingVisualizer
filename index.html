@@ -80,6 +80,109 @@
                     <button id="reset" class="waves-effect waves-light btn blue-grey"><i class="material-icons">replay</i></button>
                 </div>
             </div>
+            <div class="row">
+                <ul class="collapsible popout" data-collapsible="accordion">
+                    <li>
+                        <div class="collapsible-header">Bubble Sort</div>
+                        <div class="collapsible-body">
+                            <div class="complexity">
+                                <p class="worst">O(?)</p>
+                                <p class="best">O(?)</p>
+                                <p class="average">O(?)</p>
+                            </div>
+                            <div class="explanation"></div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-header">Selection Sort</div>
+                        <div class="collapsible-body">
+                            <div class="complexity">
+                                <p class="worst">O(?)</p>
+                                <p class="best">O(?)</p>
+                                <p class="average">O(?)</p>
+                            </div>
+                            <div class="explanation"></div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-header">Cocktail Shaker Sort</div>
+                        <div class="collapsible-body">
+                            <div class="complexity">
+                                <p class="worst">O(?)</p>
+                                <p class="best">O(?)</p>
+                                <p class="average">O(?)</p>
+                            </div>
+                            <div class="explanation"></div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-header">Comb Sort</div>
+                        <div class="collapsible-body">
+                            <div class="complexity">
+                                <p class="worst">O(?)</p>
+                                <p class="best">O(?)</p>
+                                <p class="average">O(?)</p>
+                            </div>
+                            <div class="explanation"></div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-header">Insertion Sort</div>
+                        <div class="collapsible-body">
+                            <div class="complexity">
+                                <p class="worst">O(?)</p>
+                                <p class="best">O(?)</p>
+                                <p class="average">O(?)</p>
+                            </div>
+                            <div class="explanation"></div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-header">Quicksort</div>
+                        <div class="collapsible-body">
+                            <div class="complexity">
+                                <p class="worst">O(?)</p>
+                                <p class="best">O(?)</p>
+                                <p class="average">O(?)</p>
+                            </div>
+                            <div class="explanation"></div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-header">Radix Sort</div>
+                        <div class="collapsible-body">
+                            <div class="complexity">
+                                <p class="worst">O(?)</p>
+                                <p class="best">O(?)</p>
+                                <p class="average">O(?)</p>
+                            </div>
+                            <div class="explanation"></div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-header">Heap Sort</div>
+                        <div class="collapsible-body">
+                            <div class="complexity">
+                                <p class="worst">O(?)</p>
+                                <p class="best">O(?)</p>
+                                <p class="average">O(?)</p>
+                            </div>
+                            <div class="explanation"></div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-header">Merge Sort</div>
+                        <div class="collapsible-body">
+                            <div class="complexity">
+                                <p class="worst">O(?)</p>
+                                <p class="best">O(?)</p>
+                                <p class="average">O(?)</p>
+                            </div>
+                            <div class="explanation"></div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </div>
     </main>
     <footer>
@@ -119,6 +222,7 @@
         var two, xdef, maxWidth, paddef, barWidth, primary;
 
         $(document).ready(function() {
+            $('.collapsible').collapsible();
             $("#bubble").trigger("click");
             init();
             draw(baseState);
@@ -378,6 +482,11 @@
             playBack();
         })
     </script>
+</body>
+
+</html>
+}) obj = document.getElementById("playBack"); obj.addEventListener("click", function() { stop(); playBack(); })
+</script>
 </body>
 
 </html>
