@@ -4,9 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Sorting Algorithm Visualizer</title>
-    <script src="two.min.js"></script>
-    <script src="sorting.js"></script>
-    <script src="state.js"></script>
 
     <!-- Compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
@@ -94,6 +91,9 @@
     <!-- Compiled and minified JavaScript -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+    <script src="two.min.js"></script>
+    <script src="sorting.js"></script>
+    <script src="state.js"></script>
 
     <script>
         var LEN = 25;
@@ -118,10 +118,12 @@
 
 
         var arr = randArray(LEN);
+        var rects = [];
         var baseState = new State(arr, {});
         var states = [];
         states.push(baseState);
         var currentState = 0;
+        var prevState = 0;
         var two, xdef, maxWidth, paddef, barWidth, primary;
 
         $(document).ready(function() {
@@ -131,13 +133,13 @@
         });
 
         $(window).resize(function() {
-            $("#displayArea").empty();
             init();
             draw(states[currentState]);
         });
 
         $("#currentState").change(function() {
             stop();
+            prevState = currentState;
             currentState = $(this).val();
             draw(states[currentState]);
         });
@@ -151,12 +153,14 @@
             stop();
             LEN = $(this).val();
             $("#reset").trigger("click");
-            $("#displayArea").empty();
             init();
             draw(states[currentState]);
         });
 
         function init() {
+            $("#displayArea").empty();
+            $('script[src="two.min.js"]').remove();
+            $('<script>').attr('src', 'two.min.js').appendTo('head');
             //initialize two.js
             xdef = 0;
             height = 500;
@@ -174,9 +178,40 @@
 
         var debstring = "";
 
+
+        function arrayDiff(a, b) {
+            var diffs = [];
+            for (var i = 0; i < a.length; i++) {
+                if (a[i] != b[i]) {
+                    diffs.push(i);
+                }
+            }
+            return diffs;
+        };
+
+        function update(state) {
+            var diffs = arrayDiff(state.data, states[prevState].data);
+            var max = Math.max(...state.data);
+            for (var i = 0; i < diffs.length; i++) {
+                var rect = rects[diffs[i]];
+                var id = rect.id;
+                htmlID = "#" + id
+                $(htmlID).remove();
+                two.remove(rect);
+                var x = xdef + (barWidth * diffs[i]) + (paddef * diffs[i]) + (1 / 2 * barWidth);
+                var barHeight = (state.data[diffs[i]] / max) * height;
+                rect = two.makeRectangle(x, (height / 2) + (height / 2 - barHeight / 2) + 1, barWidth, barHeight);
+                rect.id = id;
+                rect.fill = primary;
+                rect.noStroke();
+                two.update();
+            }
+
+        }
         //Draws the state passed as a parameter
         function draw(state) {
             two.clear();
+            rects = [];
             //iterate through and draw it
             var max = Math.max(...state.data);
             var debug = document.getElementById("debug");
@@ -185,7 +220,7 @@
                 //percent of the maxmimum value, scaled to total height of graph
                 var barHeight = (state.data[index] / max) * height;
                 var rect = two.makeRectangle(x, (height / 2) + (height / 2 - barHeight / 2) + 1, barWidth, barHeight);
-
+                rects.push(rect);
                 //If the color is null, make it default color. Else draw given color for index.
                 if (state.colors[index]) {
                     rect.fill = state.colors[index];
@@ -219,9 +254,10 @@
 
         function stepNext() {
             if (currentState != states.length - 1) {
+                prevState = currentState;
                 currentState++;
             }
-            draw(states[currentState]);
+            update(states[currentState]);
             $("#currentState").val(currentState);
             if (currentState == states.length - 1) {
                 stop();
@@ -231,6 +267,7 @@
         //Go to previous State
         function stepBack() {
             if (currentState != 0) {
+                prevState = currentState;
                 currentState--;
             }
             draw(states[currentState]);
@@ -349,8 +386,10 @@
         obj.addEventListener("click", function() {
             stop();
             states = [];
+            init();
             states.push(new State(randArray(LEN), {}));
             draw(states[0]);
+            prevState = currentState;
             currentState = 0;
             $("#currentState").val(0);
             $(".disabled").first().trigger("click");
