@@ -68,6 +68,7 @@
                     <button id="radixLSD" class="alg waves-effect waves-light btn blue-grey">Radix (LSD)</button>
                     <button id="radixMSD" class="alg waves-effect waves-light btn blue-grey">Radix (MSD)</button>
                     <button id="heap" class="alg waves-effect waves-light btn blue-grey">Heap</button>
+                    <button id="merge" class="alg waves-effect waves-light btn blue-grey">Merge</button>
                 </div>
             </div>
             <div class="row">
@@ -332,6 +333,15 @@
             enableAllButtons();
             $("#heap").addClass("disabled");
             states = heapSort(states[currentState].data);
+            $("#currentState").prop('max', states.length - 1);
+        });
+
+        obj = document.getElementById("merge");
+        obj.addEventListener("click", function() {
+            $("#reset").trigger("click");
+            enableAllButtons();
+            $("#merge").addClass("disabled");
+            states = startMergeSort(states[currentState].data);
             $("#currentState").prop('max', states.length - 1);
         });
 
