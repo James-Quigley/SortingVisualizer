@@ -632,6 +632,7 @@ function heapSort(array) {
         arrayLength--;
         heapify(data, 0, states, color);
         colorHeap(data, states, color, "#e37b7b", 0);
+        states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
     }
     return states;
 }
@@ -641,7 +642,6 @@ function colorHeap(data, states, color, levelColor, index) {
         return;
     }
     color[index] = levelColor;
-    states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
 
     colorHeap(data, states, color, "#" + (parseInt(levelColor.slice(1, levelColor.length), 16) * 10).toString(16).substring(0, 6) + "", (index * 2) + 1);
     colorHeap(data, states, color, "#" + (parseInt(levelColor.slice(1, levelColor.length), 16) * 10).toString(16).substring(0, 6) + "", (index * 2) + 2);
