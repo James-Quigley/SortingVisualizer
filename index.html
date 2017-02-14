@@ -11,6 +11,7 @@
     <!-- Compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
     <style>
         * {
             padding: 0px;
@@ -51,7 +52,7 @@
                         <div class="col s4">
                             <label for="numElements">Number of Elements</label>
                             <p class="range-field" id="numElementsRange">
-                                <input type="range" id="numElements" value="25" min="2" max="200" />
+                                <input type="range" id="numElements" value="25" min="2" max="100" />
                             </p>
                         </div>
                     </div>
@@ -64,6 +65,10 @@
                     <button id="cocktail" class="alg waves-effect waves-light btn blue-grey">Cocktail Shaker</button>
                     <button id="comb" class="alg waves-effect waves-light btn blue-grey">Comb</button>
                     <button id="insertion" class="alg waves-effect waves-light btn blue-grey">Insertion</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
                     <button id="quick" class="alg waves-effect waves-light btn blue-grey">Quick</button>
                     <button id="radixLSD" class="alg waves-effect waves-light btn blue-grey">Radix (LSD)</button>
                     <button id="radixMSD" class="alg waves-effect waves-light btn blue-grey">Radix (MSD)</button>
@@ -171,7 +176,6 @@
 
         //Draws the state passed as a parameter
         function draw(state) {
-            console.log("Redrawing");
             two.clear();
             //iterate through and draw it
             var max = Math.max(...state.data);
@@ -189,25 +193,21 @@
                     rect.fill = primary;
                 }
                 rect.noStroke();
-                two.update();
             }
+            two.update();
         }
         var runner = null;
 
         function playBack() {
             runner = setInterval(function() {
-                console.log("stepping " + currentState);
                 stepBack();
             }, delay);
-            console.log("starting");
         }
 
         function start() {
             runner = setInterval(function() {
-                console.log("stepping " + currentState);
                 stepNext();
             }, delay);
-            console.log("starting");
         }
 
         function stop() {
@@ -224,7 +224,6 @@
             draw(states[currentState]);
             $("#currentState").val(currentState);
             if (currentState == states.length - 1) {
-                console.log("STOP NOW PLS");
                 stop();
             }
         }
@@ -237,7 +236,6 @@
             draw(states[currentState]);
             $("#currentState").val(currentState);
             if (currentState == 0) {
-                console.log("STOP NOW PLS");
                 stop();
             }
         }
