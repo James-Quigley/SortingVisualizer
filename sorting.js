@@ -101,10 +101,38 @@ function selectionSort(array) {
     return states;
 }
 
+
+function find_csa(arr, subarr) {
+    var i = 0,
+        sl = subarr.length,
+        l = arr.length + 1 - sl;
+
+    loop: for (; i < l; i++) {
+        for (var j = 0; j < sl; j++)
+            if (arr[i + j] !== subarr[j])
+                continue loop;
+        return i;
+    }
+    return -1;
+}
+
+function startMergeSort(array) {
+    var states = [];
+    var color = {};
+    var data = array.slice();
+    states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
+    data = mergeSort(data, states, color, data.slice());
+    // Finalized array, fill it in all green.
+    for (var i = 0; i < data.length; i++) {
+        color[i] = "#00FF00";
+    }
+    states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
+    return states;
+}
 /*
  * MergeSort sorting algorithm
  */
-function mergeSort(data) {
+function mergeSort(data, states, color, originalData) {
     if (data.length < 2) {
         return data;
     }
@@ -112,7 +140,52 @@ function mergeSort(data) {
     var left = data.slice(0, mid);
     var right = data.slice(mid, data.length);
 
-    return merge(mergeSort(left), mergeSort(right));
+    var leftIndex = find_csa(originalData, left);
+    var rightIndex = find_csa(originalData, right);
+
+    var sortedLeft = mergeSort(left, states, color, originalData);
+    var sortedRight = mergeSort(right, states, color, originalData);
+
+    if (sortedLeft.length > 1) {
+        //Array.prototype.splice.apply(originalData, [leftIndex, sortedLeft.length].concat(sortedLeft));
+        var len = sortedLeft.length,
+            i = leftIndex;
+        for (var j = 0; j < sortedLeft.length; j++) {
+            originalData[i] = sortedLeft[j];
+            color[i] = "#FF0000";
+            states.push(new State(originalData.slice(), JSON.parse(JSON.stringify(color))));
+            color[i] = null;
+            states.push(new State(originalData.slice(), JSON.parse(JSON.stringify(color))));
+            i++;
+        }
+    }
+    if (sortedRight.length > 1) {
+        // Array.prototype.splice.apply(originalData, [rightIndex, sortedRight.length].concat(sortedRight));
+        var len = sortedRight.length,
+            i = rightIndex;
+        for (var j = 0; j < sortedRight.length; j++) {
+            originalData[i] = sortedRight[j];
+            color[i] = "#FF0000";
+            states.push(new State(originalData.slice(), JSON.parse(JSON.stringify(color))));
+            color[i] = null;
+            states.push(new State(originalData.slice(), JSON.parse(JSON.stringify(color))));
+            i++;
+        }
+    }
+
+    var totalSorted = merge(sortedLeft, sortedRight);
+    // Array.prototype.splice.apply(originalData, [leftIndex, totalSorted.length].concat(totalSorted));
+    var len = totalSorted.length,
+        i = leftIndex;
+    for (var j = 0; j < totalSorted.length; j++) {
+        originalData[i] = totalSorted[j];
+        color[i] = "#FF0000";
+        states.push(new State(originalData.slice(), JSON.parse(JSON.stringify(color))));
+        color[i] = null;
+        states.push(new State(originalData.slice(), JSON.parse(JSON.stringify(color))));
+        i++;
+    }
+    return totalSorted;
 }
 
 /*
