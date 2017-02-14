@@ -49,7 +49,7 @@
                         <div class="col s4">
                             <label for="numElements">Number of Elements</label>
                             <p class="range-field" id="numElementsRange">
-                                <input type="range" id="numElements" value="25" min="2" max="100" />
+                                <input type="range" id="numElements" value="25" min="2" max="1000" />
                             </p>
                         </div>
                     </div>
@@ -191,6 +191,7 @@
 
         function update(state) {
             var diffs = arrayDiff(state.data, states[prevState].data);
+            var colorDiffs = arrayDiff(state.colors, states[prevState].colors);
             var max = Math.max(...state.data);
             for (var i = 0; i < diffs.length; i++) {
                 var rect = rects[diffs[i]];
@@ -204,9 +205,18 @@
                 rect.id = id;
                 rect.fill = primary;
                 rect.noStroke();
-                two.update();
             }
-
+            for (var i = 0; i < colorDiffs.length; i++) {
+                var rect = rects[colorDiffs[i]];
+                if (state.colors[colorDiffs[i]]) {
+                    rect.fill = state.colors[colorDiffs[i]];
+                } else {
+                    rect.fill = primary;
+                }
+                rect.noStroke();
+                //$("#two_" + colorDiffs[i]).prop("fill", state.colors[colorDiffs[i]]);
+            }
+            two.update();
         }
         //Draws the state passed as a parameter
         function draw(state) {
@@ -270,7 +280,7 @@
                 prevState = currentState;
                 currentState--;
             }
-            draw(states[currentState]);
+            update(states[currentState]);
             $("#currentState").val(currentState);
             if (currentState == 0) {
                 stop();

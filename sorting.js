@@ -6,7 +6,7 @@
  */
 function bubbleSort(array) {
     var states = [];
-    var color = {}; // Object for color
+    var color = []; // Object for color
     var data = array.slice();
     var n = data.length;
     var swaps = 0;
@@ -32,7 +32,9 @@ function bubbleSort(array) {
             }
             color[i - 1] = null; // Remove cursor coloring.
             color[i] = null;
-            color[n] = "#00FF00"; // Set new 'n' value to sorted.
+            if (!n == data.length) {
+                color[n] = "#00FF00"; // Set new 'n' value to sorted.
+            }
             if (data[i + 1] > data[i]) {
                 // Safe catch for rare instances where value in
                 // front is already in sorted position
@@ -64,7 +66,7 @@ function bubbleSort(array) {
  */
 function selectionSort(array) {
     var states = [];
-    var color = {};
+    var color = [];
     var data = array.slice();
     var n = data.length;
 
@@ -118,7 +120,7 @@ function find_csa(arr, subarr) {
 
 function startMergeSort(array) {
     var states = [];
-    var color = {};
+    var color = [];
     var data = array.slice();
     states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
     data = mergeSort(data, states, color, data.slice());
@@ -218,7 +220,7 @@ function merge(left, right) {
  */
 function insertionSort(array) {
     var states = [];
-    var color = {};
+    var color = [];
     var data = array.slice();
     var n = data.length;
 
@@ -273,7 +275,7 @@ function insertionSort(array) {
 
 function startQuickSort(array, left, right) {
     var states = [];
-    var color = {};
+    var color = [];
     var data = array.slice();
     states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
     quickSort(data, left, right, states, color);
@@ -339,7 +341,7 @@ function partition(data, pivot, left, right, states, color) {
  */
 function cocktailShakerSort(array, delay) {
     var states = [];
-    var color = {};
+    var color = [];
     var data = array.slice();
     //Main loop
 
@@ -417,7 +419,7 @@ function cocktailShakerSort(array, delay) {
  */
 function combSort(array) {
     var states = [];
-    var color = {};
+    var color = [];
     var data = array.slice();
     //Main loop
 
@@ -485,7 +487,7 @@ var getDigit = function(num, nth) {
 
 function radixSortLSD(array) {
     var states = [];
-    var color = {};
+    var color = [];
     var data = array.slice();
 
     states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
@@ -529,7 +531,7 @@ function radixSortLSD(array) {
 
 function startRadixSortMSD(array) {
     var states = [];
-    var color = {};
+    var color = [];
     var data = array.slice();
     states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
     radixSortMSD(data, states, color);
@@ -618,7 +620,7 @@ function swap(input, index_A, index_B, states, color) {
 
 function heapSort(array) {
     var states = [];
-    var color = {};
+    var color = [];
     var data = array.slice();
     states.push(new State(data.slice(), JSON.parse(JSON.stringify(color))));
     buildHeap(data, states, color);
