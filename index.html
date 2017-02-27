@@ -189,9 +189,22 @@
             return diffs;
         };
 
+        function arrayUnique(array) {
+            var a = array.concat();
+            for (var i = 0; i < a.length; ++i) {
+                for (var j = i + 1; j < a.length; ++j) {
+                    if (a[i] === a[j])
+                        a.splice(j--, 1);
+                }
+            }
+
+            return a;
+        }
+
         function update(state) {
             var diffs = arrayDiff(state.data, states[prevState].data);
             var colorDiffs = arrayDiff(state.colors, states[prevState].colors);
+            diffs = arrayUnique(diffs.concat(colorDiffs));
             var max = Math.max(...state.data);
             for (var i = 0; i < diffs.length; i++) {
                 var rect = rects[diffs[i]];
@@ -203,18 +216,12 @@
                 var barHeight = (state.data[diffs[i]] / max) * height;
                 rect = two.makeRectangle(x, (height / 2) + (height / 2 - barHeight / 2) + 1, barWidth, barHeight);
                 rect.id = id;
-                rect.fill = primary;
-                rect.noStroke();
-            }
-            for (var i = 0; i < colorDiffs.length; i++) {
-                var rect = rects[colorDiffs[i]];
-                if (state.colors[colorDiffs[i]]) {
-                    rect.fill = state.colors[colorDiffs[i]];
+                if (state.colors[diffs[i]] != null) {
+                    rect.fill = state.colors[diffs[i]];
                 } else {
                     rect.fill = primary;
                 }
                 rect.noStroke();
-                //$("#two_" + colorDiffs[i]).prop("fill", state.colors[colorDiffs[i]]);
             }
             two.update();
         }
